@@ -561,8 +561,23 @@ class HarmonicTexture:
     def __mul__(self, other: 'HarmonicTexture') -> 'HarmonicTexture':
         return HarmonicTexture(self.harmony + other.harmony, self.texture * other.texture)
 
+    @multimethod
     def __matmul__(self, other: Instrumentation) -> 'ScoreTensor':
         return ScoreTensor(self.harmony, self.texture, other)
+
+    @multimethod
+    def __matmul__(self, other: Section) -> 'ScoreTensor':
+        instrumentation = other * len(self)
+        return ScoreTensor(self.harmony, self.texture, instrumentation)
+
+    @multimethod
+    def __matmul__(self, other: Instrument) -> 'ScoreTensor':
+        section = Section(other)
+        return self @ section
+
+    def __len__(self):
+        assert len(self.texture) == len(self.harmony)
+        return len(self.texture)
 
     def __eq__(self, other):
         if not isinstance(other, HarmonicTexture):
