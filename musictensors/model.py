@@ -340,7 +340,7 @@ class Harmony:
         return HarmonicOrchestration(self, orchestration)
 
     def __mul__(self, other: int):
-        assert isinstance(other, int) and other > 0, "The exponent must be a positive integer."
+        assert isinstance(other, int) and other > 0, "The parameter 'other' must be a positive integer."
         result = self
         for _ in range(other - 1):
             result = result + self
@@ -483,6 +483,13 @@ class Orchestration:
 
     def __add__(self, other: 'Orchestration') -> 'Orchestration':
         return Orchestration(self.sections + other.sections)
+
+    def __mul__(self, other: int) -> 'Orchestration':
+        assert isinstance(other, int) and other > 0, "The parameter 'other' must be a positive integer."
+        result = self
+        for _ in range(other - 1):
+            result = result + self
+        return result
 
     @multimethod
     def __matmul__(self, harmony: Harmony) -> 'HarmonicOrchestration':
