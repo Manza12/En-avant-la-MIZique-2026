@@ -1,10 +1,10 @@
 import matplotlib.pyplot as plt
 
-from .model import TensorContraction
+from .model import ScoreTensor
 from .utils import midi_number_to_pitch
 
 
-def plot_notes(tensor_contraction: TensorContraction,
+def plot_notes(tensor_contraction: ScoreTensor,
                figsize=(10, 5),
                linewidth: float = 5,
                eps: float = 0.01,

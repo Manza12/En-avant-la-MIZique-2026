@@ -4,7 +4,7 @@ from .model import frac, \
     Hit, Rhythm, Texture, \
     Pitch, Chord, Harmony, \
     Instrument, Section, Instrumentation, \
-    TensorContraction
+    ScoreTensor
 
 
 class ScoreTree:
@@ -265,7 +265,7 @@ class ScoreTree:
             else:
                 instrumentation = Instrumentation(
                     [Section({Instrument('Acoustic Grand Piano')}) for _ in range(len(texture))])
-            tensor_contraction = TensorContraction(harmony, texture, instrumentation)
+            tensor_contraction = ScoreTensor(harmony, texture, instrumentation)
 
             # Save the harmonic texture if it has an id
             if element.attrib.get('id') is not None:
@@ -278,7 +278,7 @@ class ScoreTree:
                 return self.decode(element[0])
 
             # Decode parallel
-            tensor_contraction = TensorContraction()
+            tensor_contraction = ScoreTensor()
             for child in element:
                 tensor_contraction = tensor_contraction | self.decode(child)
 
@@ -293,7 +293,7 @@ class ScoreTree:
                 return self.decode(element[0])
 
             # Decode concatenate
-            tensor_contraction = TensorContraction()
+            tensor_contraction = ScoreTensor()
             for child in element:
                 tensor_contraction = tensor_contraction - self.decode(child)
 

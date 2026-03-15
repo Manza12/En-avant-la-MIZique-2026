@@ -1,7 +1,6 @@
 from pathlib import Path
 
 from musictensors.audio import render_midi_to_audio
-from musictensors.functions import concatenation
 from musictensors.model import Hit, Harmony, Chord, Rhythm, Texture, Pitch, Instrument, Section
 from musictensors.plot import plot_notes, plt
 from musictensors import frac
@@ -76,7 +75,7 @@ leading_tone_ = leading_tone + (-12)
 
 # Phrases
 ## Phrase 1
-t_ph_1 = t_1 - t_2 - t_1 - t_3
+t_ph_1 = t_1 * t_2 * t_1 * t_3
 h_ph_1_head = Harmony(
     Chord(mediant),
     Chord(subdominant),
@@ -96,7 +95,7 @@ h_ph_1_tail = Harmony(
 h_ph_1 = h_ph_1_head + h_ph_1_tail
 h_ph_1 = octave_2 + (h_ph_1 | (h_ph_1 + 12))
 
-phrase_1 = t_ph_1 * h_ph_1 * (s_piano * len(t_ph_1))
+phrase_1 = t_ph_1 @ h_ph_1 @ (s_piano * len(t_ph_1))
 
 ## Phrase 2
 h_ph_2_tail = Harmony(
@@ -105,10 +104,10 @@ h_ph_2_tail = Harmony(
 )
 h_ph_2 = h_ph_1_head + h_ph_2_tail
 h_ph_2 = octave_2 + (h_ph_2 | (h_ph_2 + 12))
-phrase_2 = t_ph_1 * h_ph_2 * (s_piano * len(t_ph_1))
+phrase_2 = t_ph_1 @ h_ph_2 @ (s_piano * len(t_ph_1))
 
 ## Phrase 3
-t_ph_3 = t_1 - t_4 - t_4 - t_2_bis
+t_ph_3 = t_1 * t_4 * t_4 * t_2_bis
 
 h_ph_3_1 = Harmony(Chord(supertonic), Chord(mediant), Chord(tonic))
 h_ph_3_2 = Harmony(Chord(supertonic), Chord(mediant), Chord(subdominant), Chord(tonic))
@@ -118,10 +117,11 @@ h_ph_3_4 = Harmony(Chord(tonic), Chord(supertonic), Chord(dominant_), Chord(medi
 h_ph_3 = h_ph_3_1 + h_ph_3_2 + h_ph_3_3 + h_ph_3_4
 h_ph_3 = octave_2 + (h_ph_3 | (h_ph_3 + 12))
 
-phrase_3 = t_ph_3 * h_ph_3 * (s_piano * len(t_ph_3))
+phrase_3 = t_ph_3 @ h_ph_3 @ (s_piano * len(t_ph_3))
+phrase_3.end -= frac(1, 4)
 
 ## Phrase 4
-t_ph_4 = t_1_bis - t_2 - t_1 - t_3
+t_ph_4 = t_1_bis * t_2 * t_1 * t_3
 
 h_ph_3_1 = Harmony(Chord(supertonic), Chord(mediant), Chord(tonic))
 h_ph_3_2 = Harmony(Chord(supertonic), Chord(mediant), Chord(subdominant), Chord(tonic))
@@ -144,11 +144,11 @@ h_ph_4 = Harmony(
 )
 h_ph_4 = octave_2 + (h_ph_4 | (h_ph_4 + 12))
 
-phrase_4 = t_ph_4 * h_ph_4 * (s_piano * len(t_ph_4))
+phrase_4 = t_ph_4 @ h_ph_4 @ (s_piano * len(t_ph_4))
 
 
 ## Full piece
-piece = concatenation(phrase_1, phrase_2, phrase_3, (phrase_4 + frac('-1/4')))
+piece = phrase_1 * phrase_2 * phrase_3 * phrase_4
 
 # Paths
 name = 'ode_joie_melody'

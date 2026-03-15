@@ -1,7 +1,6 @@
 from pathlib import Path
 
 from musictensors.audio import render_midi_to_audio
-from musictensors.functions import concatenation, parallelization
 from musictensors.model import Hit, Harmony, Chord, Rhythm, Texture, Pitch, Instrument, Section
 from musictensors.plot import plot_notes, plt
 from musictensors import frac
@@ -94,7 +93,7 @@ leading_tone_ = leading_tone + (-12)
 # Phrases
 ## Phrase 1
 ### Melody
-t_ph_1 = t_1 - t_2 - t_1 - t_3
+t_ph_1 = t_1 * t_2 * t_1 * t_3
 h_ph_1_head = Harmony(
     Chord(mediant),
     Chord(subdominant),
@@ -114,11 +113,11 @@ h_ph_1_tail = Harmony(
 h_ph_1 = h_ph_1_head + h_ph_1_tail
 h_ph_1 = octave_4 + (h_ph_1 | (h_ph_1 + 12))
 
-phrase_1_mel = t_ph_1 * h_ph_1 * (s_melody * len(t_ph_1))
+phrase_1_mel = t_ph_1 @ h_ph_1 @ (s_melody * len(t_ph_1))
 
 ### Accompaniment
-t_ph_1_acc_a = t_a - t_a - t_a - t_a
-t_ph_1_acc_b = t_2 - t_3
+t_ph_1_acc_a = t_a * t_a * t_a * t_a
+t_ph_1_acc_b = t_2 * t_3
 
 h_ph_1_acc_head_a = octave_3 + Harmony(
     (tonic + -12 | dominant_ | tonic | mediant),
@@ -141,12 +140,12 @@ h_ph_1_acc_tail = octave_3 + Harmony(
     (dominant_ | leading_tone_ | supertonic),
 )
 
-phrase_1_acc_a = t_ph_1_acc_a * h_ph_1_acc_head_a * (s_accompaniment_a * len(t_ph_1_acc_a))
-phrase_1_acc_b = t_ph_1_acc_b * (h_ph_1_acc_head_b + h_ph_1_acc_tail) * (s_accompaniment_b * len(t_ph_1_acc_b))
+phrase_1_acc_a = t_ph_1_acc_a @ h_ph_1_acc_head_a @ (s_accompaniment_a * len(t_ph_1_acc_a))
+phrase_1_acc_b = t_ph_1_acc_b @ (h_ph_1_acc_head_b + h_ph_1_acc_tail) @ (s_accompaniment_b * len(t_ph_1_acc_b))
 
-phrase_1_acc = concatenation(phrase_1_acc_a, phrase_1_acc_b)
+phrase_1_acc = phrase_1_acc_a * phrase_1_acc_b
 
-phrase_1 = parallelization(phrase_1_mel, phrase_1_acc)
+phrase_1 = phrase_1_mel + phrase_1_acc
 
 ## Phrase 2
 ### Melody
@@ -156,7 +155,7 @@ h_ph_2_tail = Harmony(
 )
 h_ph_2 = h_ph_1_head + h_ph_2_tail
 h_ph_2 = octave_4 + (h_ph_2 | (h_ph_2 + 12))
-phrase_2_mel = t_ph_1 * h_ph_2 * (s_melody * len(t_ph_1))
+phrase_2_mel = t_ph_1 @ h_ph_2 @ (s_melody * len(t_ph_1))
 
 ### Accompaniment
 h_ph_2_acc_tail = octave_3 + Harmony(
@@ -164,26 +163,26 @@ h_ph_2_acc_tail = octave_3 + Harmony(
     ((tonic - 12) | mediant_ | dominant_ | tonic),
 )
 
-phrase_2_acc_a = t_ph_1_acc_a * h_ph_1_acc_head_a * (s_accompaniment_a * len(t_ph_1_acc_a))
-phrase_2_acc_b = t_ph_1_acc_b * (h_ph_1_acc_head_b + h_ph_2_acc_tail) * (s_accompaniment_b * len(t_ph_1_acc_b))
+phrase_2_acc_a = t_ph_1_acc_a @ h_ph_1_acc_head_a @ (s_accompaniment_a * len(t_ph_1_acc_a))
+phrase_2_acc_b = t_ph_1_acc_b @ (h_ph_1_acc_head_b + h_ph_2_acc_tail) @ (s_accompaniment_b * len(t_ph_1_acc_b))
 
-phrase_2_acc = concatenation(phrase_2_acc_a, phrase_2_acc_b)
+phrase_2_acc = phrase_2_acc_a * phrase_2_acc_b
 
-phrase_2 = parallelization(phrase_2_mel, phrase_2_acc)
+phrase_2 = phrase_2_mel + phrase_2_acc
 
 ## Phrase 3
 ### Melody
-t_ph_3 = t_1 - t_4 - t_4 - t_2_bis
+t_ph_3 = t_1 * t_4 * t_4 * t_2_bis
 
-h_ph_3_1 = Harmony(Chord(supertonic), Chord(mediant), Chord(tonic))
-h_ph_3_2 = Harmony(Chord(supertonic), Chord(mediant), Chord(subdominant), Chord(tonic))
-h_ph_3_3 = Harmony(Chord(supertonic), Chord(mediant), Chord(subdominant), Chord(supertonic))
-h_ph_3_4 = Harmony(Chord(tonic), Chord(supertonic), Chord(dominant_), Chord(mediant))
+h_ph_3_1 = Harmony(supertonic, mediant, tonic)
+h_ph_3_2 = Harmony(supertonic, mediant, subdominant, tonic)
+h_ph_3_3 = Harmony(supertonic, mediant, subdominant, supertonic)
+h_ph_3_4 = Harmony(tonic, supertonic, dominant_, mediant)
 
 h_ph_3 = h_ph_3_1 + h_ph_3_2 + h_ph_3_3 + h_ph_3_4
 h_ph_3 = octave_4 + (h_ph_3 | (h_ph_3 + 12))
 
-phrase_3_mel = t_ph_3 * h_ph_3 * (s_melody * len(t_ph_3))
+phrase_3_mel = t_ph_3 @ h_ph_3 @ (s_melody * len(t_ph_3))
 
 ### Accompaniment
 h_ph_3_acc_1 = octave_3 + Harmony(
@@ -217,48 +216,49 @@ h_ph_3_acc_end = octave_3 + Harmony(
     (dominant_ | tonic | mediant)
 )
 
-phrase_3_acc = concatenation(
-    t_a * h_ph_3_acc_1 * (s_accompaniment_a * len(t_a)),
-    t_b * h_ph_3_acc_2 * (s_accompaniment_b * len(t_b)),
-    t_a * h_ph_3_acc_3 * (s_accompaniment_a * len(t_a)),
-    t_b * h_ph_3_acc_4 * (s_accompaniment_b * len(t_b)),
-    t_a * h_ph_3_acc_5 * (s_accompaniment_a * len(t_a)),
-    t_b * h_ph_3_acc_6 * (s_accompaniment_b * len(t_b)),
-    t_2 * h_ph_3_acc_end * (s_accompaniment_b * len(t_2)),
+phrase_3_acc = (
+    (t_a @ h_ph_3_acc_1 @ (s_accompaniment_a * len(t_a))) *
+    (t_b @ h_ph_3_acc_2 @ (s_accompaniment_b * len(t_b))) *
+    (t_a @ h_ph_3_acc_3 @ (s_accompaniment_a * len(t_a))) *
+    (t_b @ h_ph_3_acc_4 @ (s_accompaniment_b * len(t_b))) *
+    (t_a @ h_ph_3_acc_5 @ (s_accompaniment_a * len(t_a))) *
+    (t_b @ h_ph_3_acc_6 @ (s_accompaniment_b * len(t_b))) *
+    (t_2 @ h_ph_3_acc_end @ (s_accompaniment_b * len(t_2)))
 )
 
-phrase_3 = parallelization(phrase_3_mel, phrase_3_acc)
+phrase_3 = phrase_3_mel + phrase_3_acc
+phrase_3.end -= frac(1, 4)
 
 ## Phrase 4
-t_ph_4 = t_1_bis - t_2 - t_1 - t_3
+t_ph_4 = t_1_bis * t_2 * t_1 * t_3
 
-h_ph_3_1 = Harmony(Chord(supertonic), Chord(mediant), Chord(tonic))
-h_ph_3_2 = Harmony(Chord(supertonic), Chord(mediant), Chord(subdominant), Chord(tonic))
-h_ph_3_3 = Harmony(Chord(supertonic), Chord(mediant), Chord(subdominant), Chord(supertonic))
-h_ph_3_4 = Harmony(Chord(tonic), Chord(supertonic), Chord(dominant_), Chord(mediant))
+h_ph_3_1 = Harmony(supertonic, mediant, tonic)
+h_ph_3_2 = Harmony(supertonic, mediant, subdominant, tonic)
+h_ph_3_3 = Harmony(supertonic, mediant, subdominant, supertonic)
+h_ph_3_4 = Harmony(tonic, supertonic, dominant_, mediant)
 
 h_ph_4 = Harmony(
-    Chord(mediant),
-    Chord(subdominant),
-    Chord(dominant),
-    Chord(dominant),
-    Chord(subdominant),
-    Chord(mediant),
-    Chord(supertonic),
-    Chord(tonic),
-    Chord(supertonic),
-    Chord(mediant),
-    Chord(supertonic),
-    Chord(tonic),
+    mediant,
+    subdominant,
+    dominant,
+    dominant,
+    subdominant,
+    mediant,
+    supertonic,
+    tonic,
+    supertonic,
+    mediant,
+    supertonic,
+    tonic,
 )
 h_ph_4 = octave_4 + (h_ph_4 | (h_ph_4 + 12))
 
-phrase_4_mel = t_ph_4 * h_ph_4 * (s_melody * len(t_ph_4))
-phrase_4 = parallelization(phrase_4_mel, phrase_2_acc)
+phrase_4_mel = t_ph_4 @ h_ph_4 @ (s_melody * len(t_ph_4))
+phrase_4 = phrase_4_mel + phrase_2_acc
 
 
 ## Full piece
-piece = concatenation(phrase_1, phrase_2, phrase_3, (phrase_4 + frac('-1/4')))
+piece = phrase_1 * phrase_2 * phrase_3 * phrase_4
 
 # Paths
 name = 'ode_joie_medieval'

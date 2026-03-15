@@ -85,41 +85,66 @@ class Texture:
     @multimethod
     def __init__(self):
         self.rhythms = []
+        self.start = None
+        self.end = None
 
     @multimethod
     def __init__(self, texture: 'Texture'):
         self.rhythms = [r for r in texture.rhythms]
+        self.start = texture.start
+        self.end = texture.end
 
     @multimethod
-    def __init__(self, *rhythms: Rhythm):
+    def __init__(self, *rhythms: Rhythm, start=None, end=None):
         self.rhythms = [r for r in rhythms]
+        if start is None:
+            start = frac(0)
+        if end is None:
+            end = self.endpoint
+        self.start = start
+        self.end = end
 
     @multimethod
-    def __init__(self, rhythms: List[Rhythm]):
-        self.rhythms = rhythms
+    def __init__(self, rhythms: List[Rhythm], start=None, end=None):
+        self.__init__(*rhythms, start=start, end=end)
 
     @multimethod
-    def __mul__(self, harmony: 'Harmony') -> 'HarmonicTexture':
+    def __matmul__(self, harmony: 'Harmony') -> 'HarmonicTexture':
         return HarmonicTexture(harmony, self)
 
     @multimethod
-    def __mul__(self, instrumentation: 'Instrumentation') -> 'InstrumentedTexture':
+    def __matmul__(self, instrumentation: 'Instrumentation') -> 'InstrumentedTexture':
         return InstrumentedTexture(instrumentation, self)
 
     @multimethod
-    def __mul__(self, ratio: Union[frac, int]) -> 'Texture':
-        return Texture([r * ratio for r in self.rhythms])
-
-    @multimethod
     def __add__(self, other: 'Texture') -> 'Texture':
-        return Texture(self.rhythms + other.rhythms)
+        return Texture(self.rhythms + other.rhythms,
+                       start=min(self.start, other.start),
+                       end=max(self.end, other.end))
 
     @multimethod
-    def __add__(self, other: Union[frac, int]) -> 'Texture':
-        return Texture([r + other for r in self.rhythms])
+    def __add__(self, other: frac) -> 'Texture':
+        return Texture([r + other for r in self.rhythms],
+                       start=self.start + other, end=self.end + other)
 
-    def __sub__(self, other: 'Texture') -> 'Texture':
-        return Texture(self.rhythms + [r + self.endpoint for r in other.rhythms])
+    @multimethod
+    def __mul__(self, other: 'Texture') -> 'Texture':
+        return Texture(self.rhythms + [r + self.end for r in other.rhythms],
+                       start=self.start,
+                       end=self.end + other.end - other.start)
+
+    @multimethod
+    def __mul__(self, ratio: frac) -> 'Texture':
+        return Texture([r * ratio for r in self.rhythms],
+                       start=self.start * ratio,
+                       end=self.end * ratio)
+
+    def __pow__(self, other: int) -> 'Texture':
+        assert isinstance(other, int) and other > 0, "The exponent must be a positive integer."
+        result = self
+        for _ in range(other - 1):
+            result = result * self
+        return result
 
     def __eq__(self, other):
         if not isinstance(other, Texture):
@@ -133,7 +158,7 @@ class Texture:
         return f"[{', '.join([str(r) for r in self.rhythms])}]"
 
     def __getitem__(self, key):
-        return Texture(self.rhythms[key])
+        return Texture(self.rhythms[key], start=self.start, end=self.end)
 
     @property
     def endpoint(self) -> frac:
@@ -183,10 +208,10 @@ class Pitch:
         return Harmony([self + c for c in other.chords])
 
     @multimethod
-    def __add__(self, other: 'TensorContraction') -> 'TensorContraction':
-        return TensorContraction(self + other.harmony,
-                                 other.texture,
-                                 other.instrumentation)
+    def __add__(self, other: 'ScoreTensor') -> 'ScoreTensor':
+        return ScoreTensor(self + other.harmony,
+                           other.texture,
+                           other.instrumentation)
 
     @multimethod
     def __add__(self, other: 'HarmonicTexture') -> 'HarmonicTexture':
@@ -307,11 +332,11 @@ class Harmony:
         return Harmony(*[c + other for c in self.chords])
 
     @multimethod
-    def __mul__(self, texture: Texture) -> 'HarmonicTexture':
+    def __matmul__(self, texture: Texture) -> 'HarmonicTexture':
         return HarmonicTexture(self, texture)
 
     @multimethod
-    def __mul__(self, instrumentation: 'Instrumentation') -> 'HarmonicInstrumentation':
+    def __matmul__(self, instrumentation: 'Instrumentation') -> 'HarmonicInstrumentation':
         return HarmonicInstrumentation(self, instrumentation)
 
     def __or__(self, other: 'Harmony') -> 'Harmony':
@@ -453,11 +478,11 @@ class Instrumentation:
         return Instrumentation(self.sections + other.sections)
 
     @multimethod
-    def __mul__(self, harmony: Harmony) -> 'HarmonicInstrumentation':
+    def __matmul__(self, harmony: Harmony) -> 'HarmonicInstrumentation':
         return HarmonicInstrumentation(harmony, self)
 
     @multimethod
-    def __mul__(self, texture: Texture) -> 'InstrumentedTexture':
+    def __matmul__(self, texture: Texture) -> 'InstrumentedTexture':
         return InstrumentedTexture(self, texture)
 
     def __eq__(self, other):
@@ -530,14 +555,14 @@ class HarmonicTexture:
         self.harmony = harmony[:min_length]
         self.texture = texture[:min_length]
 
-    def __or__(self, other: 'HarmonicTexture') -> 'HarmonicTexture':
+    def __add__(self, other: 'HarmonicTexture') -> 'HarmonicTexture':
         return HarmonicTexture(self.harmony + other.harmony, self.texture + other.texture)
 
-    def __sub__(self, other: 'HarmonicTexture') -> 'HarmonicTexture':
-        return HarmonicTexture(self.harmony + other.harmony, self.texture - other.texture)
+    def __mul__(self, other: 'HarmonicTexture') -> 'HarmonicTexture':
+        return HarmonicTexture(self.harmony + other.harmony, self.texture * other.texture)
 
-    def __mul__(self, other: Instrumentation) -> 'TensorContraction':
-        return TensorContraction(self.harmony, self.texture, other)
+    def __matmul__(self, other: Instrumentation) -> 'ScoreTensor':
+        return ScoreTensor(self.harmony, self.texture, other)
 
     def __eq__(self, other):
         if not isinstance(other, HarmonicTexture):
@@ -586,7 +611,7 @@ class HarmonicInstrumentation:
         self.harmony = harmony
         self.instrumentation = instrumentation
 
-    def __or__(self, other: 'HarmonicInstrumentation') -> 'HarmonicInstrumentation':
+    def __add__(self, other: 'HarmonicInstrumentation') -> 'HarmonicInstrumentation':
         return HarmonicInstrumentation(self.harmony + other.harmony, self.instrumentation + other.instrumentation)
 
     def __eq__(self, other):
@@ -617,22 +642,22 @@ class InstrumentedTexture:
         self.instrumentation = instrumentation
         self.texture = texture
 
-    def __or__(self, other: 'InstrumentedTexture') -> 'InstrumentedTexture':
+    def __add__(self, other: 'InstrumentedTexture') -> 'InstrumentedTexture':
         return InstrumentedTexture(self.instrumentation + other.instrumentation, self.texture + other.texture)
 
-    def __sub__(self, other: 'InstrumentedTexture') -> 'InstrumentedTexture':
-        return InstrumentedTexture(self.instrumentation + other.instrumentation, self.texture - other.texture)
+    def __mul__(self, other: 'InstrumentedTexture') -> 'InstrumentedTexture':
+        return InstrumentedTexture(self.instrumentation + other.instrumentation, self.texture * other.texture)
 
     def __eq__(self, other):
         if not isinstance(other, InstrumentedTexture):
             return False
         return self.texture == other.texture and self.instrumentation == other.instrumentation
 
-    def __mul__(self, other: Harmony) -> 'TensorContraction':
-        return TensorContraction(other, self.texture, self.instrumentation)
+    def __matmul__(self, other: Harmony) -> 'ScoreTensor':
+        return ScoreTensor(other, self.texture, self.instrumentation)
 
 
-class TensorContraction:
+class ScoreTensor:
     @multimethod
     def __init__(self):
         self.harmony = Harmony()
@@ -640,10 +665,10 @@ class TensorContraction:
         self.instrumentation = Instrumentation()
 
     @multimethod
-    def __init__(self, tensor_contraction: 'TensorContraction'):
-        self.harmony = Harmony(tensor_contraction.harmony)
-        self.texture = Texture(tensor_contraction.texture)
-        self.instrumentation = Instrumentation(tensor_contraction.instrumentation)
+    def __init__(self, score_tensor: 'ScoreTensor'):
+        self.harmony = Harmony(score_tensor.harmony)
+        self.texture = Texture(score_tensor.texture)
+        self.instrumentation = Instrumentation(score_tensor.instrumentation)
 
     @multimethod
     def __init__(self, harmony: Harmony, texture: Texture, instrumentation: Instrumentation):
@@ -658,46 +683,61 @@ class TensorContraction:
         self.harmony = harmony[:min_length]
         self.instrumentation = instrumentation[:min_length]
 
-    def __or__(self, other: 'TensorContraction') -> 'TensorContraction':
+    def __mul__(self, other: 'ScoreTensor') -> 'ScoreTensor':
+        new_harmony = self.harmony + other.harmony if self.harmony is not None else other.harmony
+        new_texture = self.texture * other.texture if self.texture is not None else other.texture
+        new_instrumentation = self.instrumentation + other.instrumentation \
+            if self.instrumentation is not None else other.instrumentation
+        return ScoreTensor(new_harmony, new_texture, new_instrumentation)
+
+    @multimethod
+    def __add__(self, other: 'ScoreTensor') -> 'ScoreTensor':
         new_harmony = self.harmony + other.harmony if self.harmony is not None else other.harmony
         new_texture = self.texture + other.texture if self.texture is not None else other.texture
         new_instrumentation = self.instrumentation + other.instrumentation \
             if self.instrumentation is not None else other.instrumentation
-        return TensorContraction(new_harmony, new_texture, new_instrumentation)
-
-    def __sub__(self, other: 'TensorContraction') -> 'TensorContraction':
-        new_harmony = self.harmony + other.harmony if self.harmony is not None else other.harmony
-        new_texture = self.texture - other.texture if self.texture is not None else other.texture
-        new_instrumentation = self.instrumentation + other.instrumentation \
-            if self.instrumentation is not None else other.instrumentation
-        return TensorContraction(new_harmony, new_texture, new_instrumentation)
+        return ScoreTensor(new_harmony, new_texture, new_instrumentation)
 
     @multimethod
     def __add__(self, other: frac):
         new_texture = self.texture + other if self.texture is not None else None
-        return TensorContraction(self.harmony, new_texture, self.instrumentation)
+        return ScoreTensor(self.harmony, new_texture, self.instrumentation)
 
     @multimethod
     def __add__(self, other: int):
         new_harmony = self.harmony + other if self.harmony is not None else None
-        return TensorContraction(new_harmony, self.texture, self.instrumentation)
+        return ScoreTensor(new_harmony, self.texture, self.instrumentation)
 
-    def __mul__(self, other: int) -> 'TensorContraction':
-        # Concatenante the tensor contraction with itself other times
-        if other <= 0:
-            raise ValueError("The multiplication factor must be a positive integer.")
-        elif other == 1:
-            return self
-        else:
-            return self - (self * (other - 1))
+    def __pow__(self, other: int) -> 'ScoreTensor':
+        assert isinstance(other, int) and other > 0, "The exponent must be a positive integer."
+        result = self
+        for _ in range(other - 1):
+            result = result * self
+        return result
 
     def __eq__(self, other):
-        if not isinstance(other, TensorContraction):
+        if not isinstance(other, ScoreTensor):
             return False
         same_texture = self.texture == other.texture
         same_harmony = self.harmony == other.harmony
         same_instrumentation = self.instrumentation == other.instrumentation
         return same_texture and same_harmony and same_instrumentation
+
+    @property
+    def start(self):
+        return self.texture.start
+
+    @start.setter
+    def start(self, value):
+        self.texture.start = value
+
+    @property
+    def end(self):
+        return self.texture.end
+
+    @end.setter
+    def end(self, value):
+        self.texture.end = value
 
     def notes(self) -> Set['Note']:
         result = set()
