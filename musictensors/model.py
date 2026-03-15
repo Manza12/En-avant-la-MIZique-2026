@@ -113,7 +113,7 @@ class Texture:
         return HarmonicTexture(harmony, self)
 
     @multimethod
-    def __matmul__(self, instrumentation: 'Instrumentation') -> 'InstrumentedTexture':
+    def __matmul__(self, instrumentation: 'Orchestration') -> 'InstrumentedTexture':
         return InstrumentedTexture(instrumentation, self)
 
     @multimethod
@@ -336,7 +336,7 @@ class Harmony:
         return HarmonicTexture(self, texture)
 
     @multimethod
-    def __matmul__(self, instrumentation: 'Instrumentation') -> 'HarmonicInstrumentation':
+    def __matmul__(self, instrumentation: 'Orchestration') -> 'HarmonicInstrumentation':
         return HarmonicInstrumentation(self, instrumentation)
 
     def __or__(self, other: 'Harmony') -> 'Harmony':
@@ -434,7 +434,7 @@ class Section:
         self.instruments = set(instruments)
 
     def __mul__(self, other: int):
-        return Instrumentation(*[self for _ in range(other)])
+        return Orchestration(*[self for _ in range(other)])
 
     def __eq__(self, other):
         if not isinstance(other, Section):
@@ -448,13 +448,13 @@ class Section:
         return hash(tuple(sorted(self.instruments, key=lambda i: i.name)))
 
 
-class Instrumentation:
+class Orchestration:
     @multimethod
     def __init__(self):
         self.sections = []
 
     @multimethod
-    def __init__(self, instrumentation: 'Instrumentation'):
+    def __init__(self, instrumentation: 'Orchestration'):
         self.sections = [s for s in instrumentation.sections]
 
     @multimethod
@@ -469,13 +469,13 @@ class Instrumentation:
             self.sections = list(sections)
 
     def __getitem__(self, key):
-        return Instrumentation(self.sections[key])
+        return Orchestration(self.sections[key])
 
     def __len__(self):
         return len(self.sections)
 
-    def __add__(self, other: 'Instrumentation') -> 'Instrumentation':
-        return Instrumentation(self.sections + other.sections)
+    def __add__(self, other: 'Orchestration') -> 'Orchestration':
+        return Orchestration(self.sections + other.sections)
 
     @multimethod
     def __matmul__(self, harmony: Harmony) -> 'HarmonicInstrumentation':
@@ -486,7 +486,7 @@ class Instrumentation:
         return InstrumentedTexture(self, texture)
 
     def __eq__(self, other):
-        if not isinstance(other, Instrumentation):
+        if not isinstance(other, Orchestration):
             return False
         return self.sections == other.sections
 
@@ -562,7 +562,7 @@ class HarmonicTexture:
         return HarmonicTexture(self.harmony + other.harmony, self.texture * other.texture)
 
     @multimethod
-    def __matmul__(self, other: Instrumentation) -> 'ScoreTensor':
+    def __matmul__(self, other: Orchestration) -> 'ScoreTensor':
         return ScoreTensor(self.harmony, self.texture, other)
 
     @multimethod
@@ -608,15 +608,15 @@ class HarmonicInstrumentation:
     @multimethod
     def __init__(self):
         self.harmony = Harmony()
-        self.instrumentation = Instrumentation()
+        self.instrumentation = Orchestration()
 
     @multimethod
     def __init__(self, harmonic_instrumentation: 'HarmonicInstrumentation'):
         self.harmony = Harmony(harmonic_instrumentation.harmony)
-        self.instrumentation = Instrumentation(harmonic_instrumentation.instrumentation)
+        self.instrumentation = Orchestration(harmonic_instrumentation.instrumentation)
 
     @multimethod
-    def __init__(self, harmony: Harmony, instrumentation: Instrumentation):
+    def __init__(self, harmony: Harmony, instrumentation: Orchestration):
         same_length = len(harmony) == len(instrumentation)
         if not same_length:
             warnings.warn("Harmony and instrumentation have different lengths; "
@@ -638,16 +638,16 @@ class HarmonicInstrumentation:
 class InstrumentedTexture:
     @multimethod
     def __init__(self):
-        self.instrumentation = Instrumentation()
+        self.instrumentation = Orchestration()
         self.texture = Texture()
 
     @multimethod
     def __init__(self, texture_instrumentation: 'InstrumentedTexture'):
-        self.instrumentation = Instrumentation(texture_instrumentation.instrumentation)
+        self.instrumentation = Orchestration(texture_instrumentation.instrumentation)
         self.texture = Texture(texture_instrumentation.texture)
 
     @multimethod
-    def __init__(self, instrumentation: Instrumentation, texture: Texture):
+    def __init__(self, instrumentation: Orchestration, texture: Texture):
         same_length = len(texture) == len(instrumentation)
         if not same_length:
             warnings.warn("Texture and instrumentation have different lengths; "
@@ -677,16 +677,16 @@ class ScoreTensor:
     def __init__(self):
         self.harmony = Harmony()
         self.texture = Texture()
-        self.instrumentation = Instrumentation()
+        self.instrumentation = Orchestration()
 
     @multimethod
     def __init__(self, score_tensor: 'ScoreTensor'):
         self.harmony = Harmony(score_tensor.harmony)
         self.texture = Texture(score_tensor.texture)
-        self.instrumentation = Instrumentation(score_tensor.instrumentation)
+        self.instrumentation = Orchestration(score_tensor.instrumentation)
 
     @multimethod
-    def __init__(self, harmony: Harmony, texture: Texture, instrumentation: Instrumentation):
+    def __init__(self, harmony: Harmony, texture: Texture, instrumentation: Orchestration):
         same_length = len(harmony) == len(texture) == len(instrumentation)
         if not same_length:
             warnings.warn("Harmony, texture and instrumentation have different lengths; "

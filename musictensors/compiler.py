@@ -3,7 +3,7 @@ import xml.etree.ElementTree as ET
 from .model import frac, \
     Hit, Rhythm, Texture, \
     Pitch, Chord, Harmony, \
-    Instrument, Section, Instrumentation, \
+    Instrument, Section, Orchestration, \
     ScoreTensor
 
 
@@ -244,7 +244,7 @@ class ScoreTree:
             for child in element:
                 section = self.decode(child)
                 sections.append(section)
-            instrumentation = Instrumentation(sections)
+            instrumentation = Orchestration(sections)
 
             # Save the instrumentation if it has an id
             if element.attrib.get('id') is not None:
@@ -263,7 +263,7 @@ class ScoreTree:
             if len(element) == 3:
                 instrumentation = self.decode(element[2])
             else:
-                instrumentation = Instrumentation(
+                instrumentation = Orchestration(
                     [Section({Instrument('Acoustic Grand Piano')}) for _ in range(len(texture))])
             tensor_contraction = ScoreTensor(harmony, texture, instrumentation)
 
