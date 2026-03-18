@@ -111,44 +111,44 @@ def h(ba, mi, a0, a1, a2):
 # =============================================================================
 
 #      bass          inner_left     arp_low        arp_mid        arp_high
-h1  = h(tonic,        mediant,       dominant,      up(tonic),     up(mediant))      # C: C E G C E
-h2  = h(tonic,        supertonic,    submediant,    up(supertonic),up(subdominant))  # Dm: C D A D F
-h3  = h(leading_tone_1,supertonic,   dominant,      up(supertonic),up(subdominant))  # G7(no3): B D G D F
-h4  = h(tonic,        mediant,       dominant,      up(tonic),     up(mediant))      # C: = h1
-h5  = h(tonic,        mediant,       submediant,    up(mediant),   up(submediant))   # Am: C E A E A
-h6  = h(tonic,        supertonic,    tritone,       submediant,    up(supertonic))   # D: C D F# A D
-h7  = h(leading_tone_1,supertonic,   dominant,      up(supertonic),up(dominant))     # G: B D G D G
-h8  = h(leading_tone_1,tonic,        mediant,       dominant,      up(tonic))        # C/E: B C E G C
+h1  = h(tonic,        mediant,       dominant,      up(tonic),     up(mediant))      # I - C: C E G C E
+h2  = h(tonic,        supertonic,    submediant,    up(supertonic),up(subdominant))  # ii - Dm: C D A D F
+h3  = h(leading_tone_1,supertonic,   dominant,      up(supertonic),up(subdominant))  # V7 - G7(no3): B D G D F
+h4  = h(tonic,        mediant,       dominant,      up(tonic),     up(mediant))      # I - C: = h1
+h5  = h(tonic,        mediant,       submediant,    up(mediant),   up(submediant))   # vi - Am: C E A E A
+h6  = h(tonic,        supertonic,    tritone,       submediant,    up(supertonic))   # V/V - D: C D F# A D
+h7  = h(leading_tone_1,supertonic,   dominant,      up(supertonic),up(dominant))     # V - G: B D G D G
+h8  = h(leading_tone_1,tonic,        mediant,       dominant,      up(tonic))        # I7 - Cmaj7: B C E G C
 
-h9  = h(submediant_1, tonic,         mediant,       dominant,      up(tonic))        # C/A: A C E G C
-h10 = h(supertonic_1, submediant_1,  supertonic,    tritone,       up(tonic))        # D7: D A D F# C
-h11 = h(dominant_1,   leading_tone_1,supertonic,    dominant,      leading_tone)     # G: G B D G B
-h12 = h(dominant_1,   flat_seventh_1,mediant,       dominant,      up(flat_second))  # E7: G Bb E G C#
+h9  = h(submediant_1, tonic,         mediant,       dominant,      up(tonic))        # vi7 - Am7: A C E G C
+h10 = h(supertonic_1, submediant_1,  supertonic,    tritone,       up(tonic))        # V7/V - D7: D A D F# C
+h11 = h(dominant_1,   leading_tone_1,supertonic,    dominant,      leading_tone)     # V - G: G B D G B
+h12 = h(dominant_1,   flat_seventh_1,mediant,       dominant,      up(flat_second))  # viiº7/ii - C#dim7: G Bb E G C#
 
-h13 = h(subdominant_1,submediant_1,  supertonic,    submediant,    up(supertonic))   # Dm: F A D A D
-h14 = h(subdominant_1,flat_sixth_1,  supertonic,    subdominant,   leading_tone)     # vii°/V: F Ab D F B
-h15 = h(mediant_1,    dominant_1,    tonic,         dominant,      up(tonic))        # C: E G C G C
-h16 = h(mediant_1,    subdominant_1, submediant_1,  tonic,         subdominant)      # F: E F A C F
+h13 = h(subdominant_1,submediant_1,  supertonic,    submediant,    up(supertonic))   # ii - Dm: F A D A D
+h14 = h(subdominant_1,flat_sixth_1,  supertonic,    subdominant,   leading_tone)     # vii°7 - Bdim7: F Ab D F B
+h15 = h(mediant_1,    dominant_1,    tonic,         dominant,      up(tonic))        # I - C: E G C G C
+h16 = h(mediant_1,    subdominant_1, submediant_1,  tonic,         subdominant)      # IV7 - Fmaj7: E F A C F
 
-h17 = h(supertonic_1, subdominant_1, submediant_1,  tonic,         subdominant)      # F/D: D F A C F
-h18 = h(dominant_2,   supertonic_1,  dominant_1,    leading_tone_1,subdominant)      # G7: G2 D3 G3 B3 F4
-h19 = h(tonic_1,      mediant_1,     dominant_1,    tonic,         mediant)          # C: C3 E3 G3 C4 E4
-h20 = h(tonic_1,      dominant_1,    flat_seventh_1,tonic,         mediant)          # C7: C3 G3 Bb3 C4 E4
+h17 = h(supertonic_1, subdominant_1, submediant_1,  tonic,         subdominant)      # ii7 - Dm7: D F A C F
+h18 = h(dominant_2,   supertonic_1,  dominant_1,    leading_tone_1,subdominant)      # V7 - G7: G2 D3 G3 B3 F4
+h19 = h(tonic_1,      mediant_1,     dominant_1,    tonic,         mediant)          # I - C: C3 E3 G3 C4 E4
+h20 = h(tonic_1,      dominant_1,    flat_seventh_1,tonic,         mediant)          # V7/IV - C7: C3 G3 Bb3 C4 E4
 
-h21 = h(subdominant_2,subdominant_1, submediant_1,  tonic,         mediant)          # Am/F: F2 F3 A3 C4 E4
-h22 = h(tritone_2,    tonic_1,       submediant_1,  tonic,         flat_third)       # chromatic: F#2 C3 A3 C4 Eb4
-h23 = h(flat_sixth_2, subdominant_1, leading_tone_1,tonic,         supertonic)       # chromatic: Ab2 F3 B3 C4 D4
-h24 = h(dominant_2,   subdominant_1, dominant_1,    leading_tone_1,supertonic)       # G: G2 F3 G3 B3 D4
+h21 = h(subdominant_2,subdominant_1, submediant_1,  tonic,         mediant)          # IV7 - Fmaj7: F2 F3 A3 C4 E4
+h22 = h(tritone_2,    tonic_1,       submediant_1,  tonic,         flat_third)       # viiº7/V - F#dim7: F#2 C3 A3 C4 Eb4
+h23 = h(flat_sixth_2, subdominant_1, leading_tone_1,tonic,         supertonic)       # viiº7 - Bdim7: Ab2 F3 B3 C4 D4
+h24 = h(dominant_2,   subdominant_1, dominant_1,    leading_tone_1,supertonic)       # V7 - G7: G2 F3 G3 B3 D4
 
-h25 = h(dominant_2,   mediant_1,     dominant_1,    tonic,         mediant)          # C: G2 E3 G3 C4 E4
-h26 = h(dominant_2,   supertonic_1,  dominant_1,    tonic,         subdominant)      # F/G: G2 D3 G3 C4 F4
-h27 = h(dominant_2,   supertonic_1,  dominant_1,    leading_tone_1,subdominant)      # G7: G2 D3 G3 B3 F4
-h28 = h(dominant_2,   flat_third_1,  submediant_1,  tonic,         tritone)          # D7: G2 Eb3 A3 C4 F#4
+h25 = h(dominant_2,   mediant_1,     dominant_1,    tonic,         mediant)          # I - C: G2 E3 G3 C4 E4
+h26 = h(dominant_2,   supertonic_1,  dominant_1,    tonic,         subdominant)      # I45 - C45: G2 D3 G3 C4 F4
+h27 = h(dominant_2,   supertonic_1,  dominant_1,    leading_tone_1,subdominant)      # V7 - G7: G2 D3 G3 B3 F4
+h28 = h(dominant_2,   flat_third_1,  submediant_1,  tonic,         tritone)          # viiº7/V - F#dim7: G2 Eb3 A3 C4 F#4
 
-h29 = h(dominant_2,   mediant_1,     dominant_1,    tonic,         dominant)         # C: G2 E3 G3 C4 G4
-h30 = h(dominant_2,   supertonic_1,  dominant_1,    tonic,         subdominant)      # F/G: G2 D3 G3 C4 F4
-h31 = h(dominant_2,   supertonic_1,  dominant_1,    leading_tone_1,subdominant)      # G7: G2 D3 G3 B3 F4
-h32 = h(tonic_2,      tonic_1,       dominant_1,    flat_seventh_1,mediant)          # dim: C2 C3 G3 Bb3 E4
+h29 = h(dominant_2,   mediant_1,     dominant_1,    tonic,         dominant)         # I46 - C: G2 E3 G3 C4 G4
+h30 = h(dominant_2,   supertonic_1,  dominant_1,    tonic,         subdominant)      # I45 - C45: G2 D3 G3 C4 F4
+h31 = h(dominant_2,   supertonic_1,  dominant_1,    leading_tone_1,subdominant)      # V7 - G7: G2 D3 G3 B3 F4
+h32 = h(tonic_2,      tonic_1,       dominant_1,    flat_seventh_1,mediant)          # V7/IV - C7: C2 C3 G3 Bb3 E4
 
 # Bar 33: Fm over C pedal — chromatic dissolution run
 # C2 bass, C3 inner, then 14 sixteenth notes: F3 A3 C4 F4 C4 A3 C4 A3 F3 A3 F3 D3 F3 D3
