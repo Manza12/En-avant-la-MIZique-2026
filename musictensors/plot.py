@@ -66,8 +66,8 @@ def plot_notes(tensor_contraction: ScoreTensor,
     if x_tick_step is None:
         x_tick_step = (x_tick_end - x_tick_start) / 10
     n_x_ticks = int((x_tick_end - x_tick_start) / x_tick_step)
-    plt.xticks([float(x_tick_start + x_tick_step * i) for i in range(n_x_ticks)],
-               [str(x_tick_start + x_tick_step * i) for i in range(n_x_ticks)])
+    plt.xticks([float(x_tick_start + x_tick_step * i) for i in range(n_x_ticks + 1)],
+               [str(x_tick_start + x_tick_step * i) for i in range(n_x_ticks + 1)])
 
     if show:
         plt.show()
