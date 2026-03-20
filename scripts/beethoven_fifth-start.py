@@ -164,6 +164,7 @@ sf2_path = sound_fonts_paths['FluidR3_GM2-2']
 render_midi_to_audio(midi_path, audio_path, sf2_path)
 
 plot_notes(piece, figsize=(6, 3), x_tick_start=0, x_tick_step=frac(1, 2), color_by_instrument=True)
+
 # Save the plot as a vector image (SVG)
 plt.savefig(f'../plots/{name}.svg', format='svg')
 plt.show()
