@@ -117,6 +117,11 @@ class Texture:
         return OrchestredTexture(orchestration, self)
 
     @multimethod
+    def __matmul__(self, orchestration: 'Section') -> 'OrchestredTexture':
+        orchestration = orchestration * len(self)
+        return OrchestredTexture(orchestration, self)
+
+    @multimethod
     def __add__(self, other: 'Texture') -> 'Texture':
         return Texture(self.rhythms + other.rhythms,
                        start=min(self.start, other.start),
@@ -562,7 +567,8 @@ class HarmonicTexture:
             warnings.warn("Harmony and texture have different lengths; " +
                           f"Harmony: {len(harmony)}, " +
                           f"Texture: {len(texture)}. " +
-                          f"Clipping to the minimum length ({min(len(harmony), len(texture))}).")
+                          f"Clipping to the minimum length ({min(len(harmony), len(texture))}).",
+                          stacklevel=5)
 
         min_length = min(len(harmony), len(texture))
 

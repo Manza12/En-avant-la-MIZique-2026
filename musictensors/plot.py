@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
 
 from .model import ScoreTensor
 from .utils import midi_number_to_pitch
@@ -12,16 +13,39 @@ def plot_notes(tensor_contraction: ScoreTensor,
                x_tick_start=None,
                x_tick_end=None,
                x_tick_step=None,
+               color_by_instrument: bool = False,
                ):
     notes = tensor_contraction.notes()
+    notes = sorted(notes, key=lambda n: (n.instrument.name, n.start, n.frequency))
+
+    # Build colour map on-the-fly
+    if color_by_instrument:
+        instruments = sorted({note.instrument.name for note in notes})
+        cmap = plt.colormaps['tab20'].resampled(max(len(instruments), 2))
+        color_map = {name: cmap(i) for i, name in enumerate(instruments)}
+        hit_color = 'black'
+    else:
+        color_map = {}
+        instruments = []
+        hit_color = 'red'
+
+    def note_color(note):
+        return color_map[note.instrument.name] if color_by_instrument else 'black'
 
     fig = plt.figure(figsize=figsize)
     for note in notes:
-        plt.hlines(note.frequency, float(note.start), float(note.end), color='black', linewidth=linewidth)
+        plt.hlines(note.frequency, float(note.start), float(note.end),
+                   color=note_color(note), linewidth=linewidth)
 
     for note in notes:
-        plt.hlines(note.frequency, float(note.start - eps), float(note.start + eps), color='red', linewidth=2*linewidth)
-        # plt.vlines(float(note.start), note.frequency - eps, note.frequency + eps, color='red', linewidth=linewidth)
+        plt.hlines(note.frequency, float(note.start - eps), float(note.start + eps),
+                   color=hit_color, linewidth=2 * linewidth)
+
+    if color_by_instrument:
+        plt.legend(handles=[mpatches.Patch(color=color_map[n], label=n) for n in instruments],
+                   loc='upper left', bbox_to_anchor=(1.01, 1),
+                   borderaxespad=0, fontsize='small')
+        plt.tight_layout(rect=[0, 0, 1, 1])  # deja un 15% a la derecha para la leyenda
 
     # Set y-axis
     min_freq = min(note.frequency for note in notes)
