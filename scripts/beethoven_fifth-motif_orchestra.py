@@ -129,7 +129,7 @@ m_2_bass = (t_main_2 @ (octave_2 + h_2)) @ s_1_bass
 m_2_dbas = (t_main_2 @ (octave_1 + h_2)) @ s_1_dbas
 m_2 = m_2_high + m_2_medi + m_2_bass + m_2_dbas
 
-phrase_1 = m_1 * m_2
+phrase_1 = m_1
 
 # =============================================================================
 # FULL PIECE
@@ -146,7 +146,7 @@ piece = phrase_1
 # PATHS & RENDER
 # =============================================================================
 
-name = 'beethoven_fifth-start'
+name = 'beethoven_fifth-start_orchestra'
 midi_path  = Path(f'../midi/{name}.mid')
 audio_path = Path(f'../audio/{name}.wav')
 
@@ -155,7 +155,7 @@ midi.write(midi_path)
 
 render_midi_to_audio(midi_path, audio_path, sf2_path)
 
-plot_notes(piece, figsize=(6, 3), x_tick_start=0, x_tick_step=frac(1, 2), color_by_instrument=True)
+plot_notes(piece, figsize=(8, 3), x_tick_start=0, x_tick_step=frac(1, 2), color_by_instrument=True)
 
 # Save the plot as a vector image (SVG)
 plt.savefig(f'../plots/{name}.svg', format='svg')

@@ -1,9 +1,9 @@
 from pathlib import Path
 
-from musictensors.audio import render_midi_to_audio
+from musictensors.audio import render_midi_to_audio, sf2_path
 from musictensors.model import Hit, Harmony, Chord, Rhythm, Texture, Pitch, Instrument, Section
 from musictensors.plot import plot_notes, plt
-from musictensors import frac, Orchestration
+from musictensors import frac
 
 # =============================================================================
 # TONIC
@@ -153,14 +153,6 @@ audio_path = Path(f'../audio/{name}.wav')
 
 midi = piece.to_midi(bpm=108 * 2)
 midi.write(midi_path)
-
-sound_fonts_paths = {
-    'FluidR3_GM2-2': Path("../../../SoundFonts/FluidR3_GM2-2.sf2"),
-    'GeneralUser':   Path("../../../SoundFonts/GeneralUser-GS/GeneralUser-GS.sf2"),
-    'Musyng Kite':   Path("../../../SoundFonts/Musyng_Kite/Musyng_Kite.sf2"),
-    'Arachno':       Path("../../../SoundFonts/Arachno/Arachno-v1.0.sf2"),
-}
-sf2_path = sound_fonts_paths['FluidR3_GM2-2']
 
 render_midi_to_audio(midi_path, audio_path, sf2_path)
 

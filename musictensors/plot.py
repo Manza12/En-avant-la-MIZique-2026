@@ -13,6 +13,7 @@ def plot_notes(tensor_contraction: ScoreTensor,
                x_tick_start=None,
                x_tick_end=None,
                x_tick_step=None,
+               y_tick_step=None,
                color_by_instrument: bool = False,
                ):
     notes = tensor_contraction.notes()
@@ -52,7 +53,9 @@ def plot_notes(tensor_contraction: ScoreTensor,
     max_freq = max(note.frequency for note in notes)
     ambitus = max_freq - min_freq
     plt.ylim(min_freq - 1, max_freq + 1)
-    plt.yticks(range(min_freq, max_freq + 1, ambitus // 5))
+    if y_tick_step is None:
+        y_tick_step = ambitus // 5 if ambitus >= 5 else 1
+    plt.yticks(range(min_freq, max_freq + 1, y_tick_step))
 
     # Set y-axis labels
     formatter = plt.FuncFormatter(lambda x, _: f'{midi_number_to_pitch(x)}')
