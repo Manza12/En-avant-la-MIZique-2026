@@ -1,4 +1,4 @@
-from helpers.texture_to_svg import texture_to_svg
+from texture_to_svg import texture_to_svg
 
 T = [
     [0, 0, 0, 0, 2, 1, 1, 1],

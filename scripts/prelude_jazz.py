@@ -1,7 +1,7 @@
 from pathlib import Path
 from time import time
 
-from musictensors.audio import render_midi_to_audio
+from musictensors.audio import render_midi_to_audio, sf2_path
 from musictensors.model import Hit, Harmony, Chord, Rhythm, Texture, Pitch, Instrument
 from musictensors.plot import plot_notes, plt
 
@@ -128,6 +128,8 @@ t_11 = Texture(
     Rhythm(Hit('5/24', '1/24'), Hit('11/24', '1/24')),
     Rhythm(Hit('5/24', '1/24'), Hit('11/24', '1/24'))
 )
+R_12 = Rhythm(Hit('0/24', '12/24'), Hit('5/24', '7/24'))
+t_12 = Texture(R_12, R_12, R_12, R_12, R_12)
 
 # =============================================================================
 # INSTRUMENT
@@ -151,14 +153,14 @@ def h(ba, mi, a0, a1, a2):
     )
 
 #      bass          inner_left     arp_low        arp_mid        arp_high
-h1  = h(tonic,        mediant,       dominant,      leading_tone,     up(mediant))      # I - C: C E G C E
-h2  = h(tonic,        supertonic,    submediant,    up(supertonic),up(subdominant))  # ii - Dm: C D A D F
-h3  = h(leading_tone_1,supertonic,   dominant,      up(supertonic),up(subdominant))  # V7 - G7(no3): B D G D F
-h4  = h(tonic,        mediant,       dominant,      leading_tone,     up(mediant))      # I - C: = h1
-h5  = h(tonic,        mediant,       submediant,    up(mediant),   up(dominant))   # vi - Am: C E A E A
-h6  = h(tonic,        supertonic,    tritone,       submediant,    up(mediant))   # V/V - D: C D F# A D
-h7  = h(leading_tone_1,supertonic,   dominant,      up(supertonic),up(tritone))     # V - G: B D G D G
-h8  = h(leading_tone_1,tonic,        mediant,       dominant,      up(tonic))           # I7 - Cmaj7: B C E G C
+h1  = h(tonic,        mediant,       dominant,      leading_tone,  up(mediant))      # Cmaj7: C E G B C
+h2  = h(tonic,        supertonic,    submediant,    up(supertonic),  up(subdominant))# Dm7: C D A D F
+h3  = h(leading_tone_1,supertonic,   dominant,      up(supertonic),up(tritone))      # Gmaj7: B D G D F#
+h4  = h(tonic,        mediant,       dominant,      leading_tone,  up(mediant))      # Cmaj7: C E G B E
+h5  = h(tonic,        mediant,       submediant,    up(mediant),   up(dominant))     # Am7: C E A E G
+h6  = h(tonic,        flat_third,    tritone,       submediant,    up(supertonic))   # D7b9: C Eb F# A D
+h7  = h(leading_tone_1,supertonic,   tritone,       up(supertonic),up(dominant))     # Gmaj7: B D F# D G
+h8  = h(leading_tone_1,tonic,        mediant,       dominant,      up(tonic))        # Cmaj7: B C E G C
 
 h9  = h(submediant_1, tonic,         mediant,       dominant,      up(tonic))        # vi7 - Am7: A C E G C
 h10 = h(supertonic_1, submediant_1,  supertonic,    tritone,       up(tonic))        # V7/V - D7: D A D F# C
@@ -259,38 +261,38 @@ hts = [
     t_4 @ h5,
     t_5 @ h6,
     t_4 @ h7,
-    t_2 @ h8,
-    t_6 @ h9,
-    t_7 @ h10,
-    t_6 @ h11,
-    t_2 @ h12,
-    t_4 @ h13,
-    t_4 @ h14,
-    t_9 @ h15,
-    t_10 @ h16,
-    t_11 @ h17,
-    t_11 @ h18,
-    t @ h19,
-    t @ h20,
-    t @ h21,
-    t @ h22,
-    t @ h23,
-    t @ h24,
-    t @ h25,
-    t @ h26,
-    t @ h27,
-    t @ h28,
-    t @ h29,
-    t @ h30,
-    t @ h31,
-    t @ h32,
+    t_12 @ h8,
+    # t_6 @ h9,
+    # t_7 @ h10,
+    # t_6 @ h11,
+    # t_2 @ h12,
+    # t_4 @ h13,
+    # t_4 @ h14,
+    # t_9 @ h15,
+    # t_10 @ h16,
+    # t_11 @ h17,
+    # t_11 @ h18,
+    # t @ h19,
+    # t @ h20,
+    # t @ h21,
+    # t @ h22,
+    # t @ h23,
+    # t @ h24,
+    # t @ h25,
+    # t @ h26,
+    # t @ h27,
+    # t @ h28,
+    # t @ h29,
+    # t @ h30,
+    # t @ h31,
+    # t @ h32,
 ]
 
 bars = [ht @ piano for ht in hts]
 
-m33 = (t_run   @ h33) @ piano
-m34 = (t_run   @ h34) @ piano
-m35 = (t_final @ h35) @ piano
+# m33 = (t_run   @ h33) @ piano
+# m34 = (t_run   @ h34) @ piano
+# m35 = (t_final @ h35) @ piano
 
 # =============================================================================
 # FULL PIECE
@@ -300,7 +302,7 @@ piece = bars[0]
 for b in bars[1:]:
     piece = piece * b
 
-piece = piece * m33 * m34 * m35
+# piece = piece * m33 * m34 * m35
 
 end = time()
 print(f"Generated piece in {end - start:.3f} seconds")
@@ -319,19 +321,15 @@ midi.write(midi_path)
 end = time()
 print(f"Wrote MIDI in {end - start:.3f} seconds")
 
-sound_fonts_paths = {
-    'FluidR3_GM2-2': Path("../../../SoundFonts/FluidR3_GM2-2.sf2"),
-    'GeneralUser':   Path("../../../SoundFonts/GeneralUser-GS/GeneralUser-GS.sf2"),
-    'Musyng Kite':   Path("../../../SoundFonts/Musyng_Kite/Musyng_Kite.sf2"),
-    'Arachno':       Path("../../../SoundFonts/Arachno/Arachno-v1.0.sf2"),
-}
-
-sf2_path = sound_fonts_paths['Arachno']
-
 start = time()
 render_midi_to_audio(midi_path, audio_path, sf2_path)
 end = time()
 print(f"Rendered audio in {end - start:.3f} seconds")
 
-# plot_notes(piece, figsize=(16, 4), x_tick_start=0, x_tick_step=1)
-# plt.show()
+plot_notes(piece, figsize=(8, 3), x_tick_start=0, x_tick_step=1)
+plt.tight_layout()
+
+# Save the plot as a vector image (SVG)
+plt.savefig(f'../plots/{name}.svg', format='svg')
+
+plt.show()
