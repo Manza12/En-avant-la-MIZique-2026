@@ -1,11 +1,11 @@
 from pathlib import Path
 
-from musictensors.audio import render_midi_to_audio
+from musictensors.audio import render_midi_to_audio, sf2_path
 from musictensors.model import Hit, Harmony, Chord, Rhythm, Texture, Pitch, Instrument, Section
 from musictensors.plot import plot_notes, plt
 from musictensors import frac
 
-
+Chord.default_velocity = 90
 # Tonic
 D4 = Pitch(62)
 
@@ -234,7 +234,7 @@ phrase_4 = phrase_4_mel + phrase_2_acc
 piece = phrase_1 * phrase_2 * phrase_3 * phrase_4
 
 # Paths
-name = 'ode_joie'
+name = Path(__file__).stem
 midi_path = Path(f'../midi/{name}.mid')
 audio_path = Path(f'../audio/{name}.wav')
 
@@ -243,16 +243,6 @@ midi = piece.to_midi(bpm=80*2)
 midi.write(midi_path)
 
 # Render MIDI to audio
-sound_font = 'Arachno'
-
-sound_fonts_paths = {
-    'FluidR3_GM2-2': Path("../../../SoundFonts/FluidR3_GM2-2.sf2"),
-    'GeneralUser': Path("../../../SoundFonts/GeneralUser-GS/GeneralUser-GS.sf2"),
-    'Musyng Kite': Path("../../../SoundFonts/Musyng_Kite/Musyng_Kite.sf2"),
-    'Arachno': Path("../../../SoundFonts/Arachno/Arachno-v1.0.sf2"),
-}
-sf2_path = sound_fonts_paths[sound_font]
-
 render_midi_to_audio(
     midi_path,
     audio_path,
@@ -260,8 +250,11 @@ render_midi_to_audio(
 )
 
 # Plot
-plot_notes(piece,
-           figsize=(12, 6),
-           x_tick_start=0,
-           x_tick_step=1,)
+plot_notes(piece, figsize=(8, 3), x_tick_start=0, x_tick_step=1)
+plt.tight_layout()
+
+# Save the plot as a vector image (SVG)
+plt.savefig(f'../plots/{name}.svg', format='svg')
+
 plt.show()
+

@@ -305,7 +305,8 @@ render_midi_to_audio(
     sf2_path
 )
 
-plot_notes(piece, figsize=(8, 3), x_tick_start=0, x_tick_step=1)
+# Plot
+plot_notes(piece, figsize=(8, 3), x_tick_start=0, x_tick_step=1, color_by_instrument=True)
 plt.tight_layout()
 
 # Save the plot as a vector image (SVG)
