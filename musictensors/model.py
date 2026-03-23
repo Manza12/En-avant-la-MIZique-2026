@@ -144,6 +144,14 @@ class Texture:
                        start=self.start * ratio,
                        end=self.end * ratio)
 
+    @multimethod
+    def __mul__(self, other: int) -> 'Texture':
+        assert isinstance(other, int) and other > 0, "The other must be a positive integer."
+        result = self
+        for _ in range(other - 1):
+            result = result + self
+        return result
+
     def __pow__(self, other: int) -> 'Texture':
         assert isinstance(other, int) and other > 0, "The exponent must be a positive integer."
         result = self
@@ -174,6 +182,10 @@ class Texture:
                 if end > result:
                     result = end
         return result
+
+    @property
+    def duration(self) -> frac:
+        return self.end - self.start
 
 
 # Frequency
