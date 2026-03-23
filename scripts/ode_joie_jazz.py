@@ -172,26 +172,32 @@ h_ph_3 = octave_4 + h_ph_3
 
 phrase_3_melody = t_ph_3 @ h_ph_3 @ saxo
 
-# ### Accompaniment
-# t_1 = Texture(Rhythm(Hit('0', '5/12')), Rhythm(Hit('5/12', '7/12'))) ** 2
-#
-# h_Dmaj7 = octave_3 + Harmony(tonic | mediant | dominant | leading_tone)
-# h_Fsm7 = octave_3 + Harmony(mediant | dominant | leading_tone | supertonic + 12)
-# h_Bm7 = octave_3 + Harmony(submediant_ | tonic | mediant | dominant)
-# h_Em7 = octave_3 + Harmony(supertonic | subdominant | submediant | tonic + 12)
-# h_A7 = octave_3 + Harmony(dominant_ | leading_tone_ | supertonic | subdominant)
-#
-# phrase_1_accompaniment = ((t_1 @ (h_Dmaj7 + h_Bm7 + h_Em7 + h_A7) @ s_piano) *
-#                           (t_1 @ (h_Fsm7 + h_Bm7 + h_Em7 + h_A7) @ s_piano))
-#
-# ### Bass
-# t_bass = Texture(Rhythm(Hit('0', '1/2'))) ** 8
-# h_bass = octave_2 + Harmony(tonic, submediant_, supertonic, dominant_, mediant, submediant_, supertonic, dominant_,
-#                             velocity=127)
-# phrase_1_bass = t_bass @ h_bass @ bass
+### Accompaniment
+t_1 = Texture(Rhythm(Hit('0', '5/12')), Rhythm(Hit('5/12', '7/12')))
+t_1_bis = Texture(Rhythm(Hit('0', '3/12')), Rhythm(Hit('3/12', '2/12')), Rhythm(Hit('5/12', '7/12')))
+t_basic = Texture(Rhythm(Hit('0', '1/2')))
+t_double = Texture(Rhythm(Hit('0', '1/4')))
+
+h_Fs7 = octave_3 + Harmony(mediant | (dominant + 1) | leading_tone | supertonic + 12)
+h_Csm7 = octave_3 + Harmony(leading_tone_ | supertonic | subdominant | submediant)
+
+phrase_3_accompaniment = (((t_1 @ (h_A7 + h_Dmaj7)) *
+                           (t_double ** 2 * t_basic @ (h_Em7 + h_A7 + h_Dmaj7)) *
+                           (t_double ** 4 @ (h_Em7 + h_A7 + h_Csm7 + h_Fs7)) *
+                           (t_double ** 4 @ (h_Bm7 + h_Em7 + h_A7 + h_Dmaj7)))) @ s_piano
+
+### Bass
+t_bass_simple = Texture(Rhythm(Hit('0', '1/2')))
+t_bass_double = Texture(Rhythm(Hit('0', '1/4')))
+t_bass = t_bass_simple ** 2 * t_bass_double ** 2 * t_bass_simple * t_bass_double ** 8
+
+h_bass = octave_2 + Harmony(dominant_, tonic, supertonic, dominant_, tonic, supertonic, dominant_, leading_tone_,
+                            mediant, submediant_, supertonic, dominant_, tonic)
+
+phrase_3_bass = t_bass @ h_bass @ bass
 
 ### Full phrase 3
-phrase_3 = phrase_3_melody # + phrase_3_accompaniment + phrase_3_bass
+phrase_3 = phrase_3_melody + phrase_3_accompaniment  + phrase_3_bass
 
 
 ## Full piece
