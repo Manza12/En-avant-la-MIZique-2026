@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from musictensors.audio import render_midi_to_audio
+from musictensors.audio import render_midi_to_audio, sf2_path
 from musictensors.model import Hit, Harmony, Chord, Rhythm, Texture, Pitch, Instrument, Section
 from musictensors.plot import plot_notes, plt
 from musictensors import frac
@@ -66,6 +66,12 @@ t_acc = Texture(
     Rhythm(Hit('1/8', '1/8'), Hit('3/8', '1/8'), Hit('5/8', '1/8'), Hit('7/8', '1/8')),
     Rhythm(Hit('2/8', '1/8'), Hit('4/8', '1/8'), Hit('6/8', '1/8')),
 )
+t_acc_head_bis = Texture(
+    Rhythm(Hit('0', '1/8')),
+    Rhythm(Hit('1/8', '1/8')),
+    Rhythm(Hit('2/8', '1/8')),
+    Rhythm(Hit('3/8', '1/8')),
+)
 # t_acc_head = Texture(
 #     Rhythm(Hit('0', '1/2')),
 #     Rhythm(Hit('0', '1/2')),
@@ -81,10 +87,17 @@ t_acc = Texture(
 #     Rhythm(Hit('0', '1')),
 # )
 
+t_bass_whole = Texture(Rhythm(Hit('0', '1/2')))
+t_bass_whole.end = frac(1, 1)
+
+t_bass_half = Texture(Rhythm(Hit('0', '1/2')))
+
+
 # Orquestration
 # s_melody_treb = Section(Instrument('Flute'))
 s_melody_medi = Section(Instrument('Oboe'), Instrument('Flute'))
 s_accompaniment = Section(Instrument('String Ensemble 1'))
+s_bass = Section(Instrument('Cello'), Instrument('Contrabass'))
 
 # Harmony
 ## Tonal degrees
@@ -137,13 +150,14 @@ phrase_1_mel_treb = t_ph_1 @ (h_ph_1 + 12) @ (s_melody_medi * len(t_ph_1))
 phrase_1_mel = phrase_1_mel_medi  # parallelization(phrase_1_mel_treb, phrase_1_mel_medi)
 
 ### Accompaniment
-h_acc_I = octave_4 + Harmony(tonic | dominant, mediant | (tonic + 12), dominant | (mediant + 12))
-h_acc_V = octave_4 + Harmony(dominant_ | subdominant, supertonic | leading_tone, subdominant | (supertonic + 12))
-h_acc_VI = octave_4 + Harmony(submediant_ | mediant, tonic | dominant, mediant | (tonic + 12))
-h_acc_I_bis = octave_4 + Harmony(mediant | (tonic + 12), dominant | (mediant + 12))
-h_acc_I46 = octave_4 + Harmony(dominant_ | mediant, tonic | dominant, mediant | (tonic + 12))
-h_acc_V_bis = octave_4 + Harmony(dominant_ | supertonic, leading_tone_ | dominant, supertonic | leading_tone)
-h_acc_I_ter = octave_4 + Harmony((tonic - 12) | mediant, tonic | dominant, mediant | (tonic + 12))
+octave_accompaniment = octave_4
+h_acc_I = octave_accompaniment + Harmony(tonic | dominant, mediant | (tonic + 12), dominant | (mediant + 12))
+h_acc_V = octave_accompaniment + Harmony(dominant_ | subdominant, supertonic | leading_tone, subdominant | (supertonic + 12))
+h_acc_VI = octave_accompaniment + Harmony(submediant_ | mediant, tonic | dominant, mediant | (tonic + 12))
+h_acc_I_bis = octave_accompaniment + Harmony(mediant | (tonic + 12), dominant | (mediant + 12))
+h_acc_I46 = octave_accompaniment + Harmony(dominant_ | mediant, tonic | dominant, mediant | (tonic + 12))
+h_acc_V_bis = octave_accompaniment + Harmony(dominant_ | supertonic, leading_tone_ | dominant, supertonic | leading_tone)
+h_acc_I_ter = octave_accompaniment + Harmony((tonic - 12) | mediant, tonic | dominant, mediant | (tonic + 12))
 
 phrase_1_acc = (
     (t_acc @ h_acc_I @ (s_accompaniment * len(t_acc))) *
@@ -153,7 +167,15 @@ phrase_1_acc = (
     (t_acc_head @ h_acc_V_bis @ (s_accompaniment * len(t_acc_head)))
 )
 
-phrase_1 = phrase_1_mel + phrase_1_acc
+### Bass
+phrase_1_bass = (
+        (t_bass_whole @ (octave_2 + Harmony(tonic | (tonic + 12)))) *
+        (t_bass_whole @ (octave_2 + Harmony(dominant_ | (dominant_ + 12)))) *
+        (t_bass_whole @ (octave_2 + Harmony(submediant_ | (submediant_ + 12)))) *
+        (t_bass_whole @ (octave_2 + Harmony(dominant | (dominant + 12))))
+) @ s_bass
+
+phrase_1 = phrase_1_mel + phrase_1_acc  # + phrase_1_bass
 
 ## Phrase 2
 ### Melody
@@ -197,21 +219,39 @@ phrase_3_mel = phrase_3_medi  # parallelization(phrase_3_medi, phrase_3_treb)
 phrase_3_mel.end -= frac(1, 4)
 
 ### Accompaniment
-h_acc_I = octave_4 + Harmony(tonic | dominant, mediant | (tonic + 12), dominant | (mediant + 12))
-h_acc_V = octave_4 + Harmony(dominant_ | subdominant, supertonic | leading_tone, subdominant | (supertonic + 12))
-h_acc_VI = octave_4 + Harmony(submediant_ | mediant, tonic | dominant, mediant | (tonic + 12))
-h_acc_V_V = octave_4 + Harmony(supertonic_ | supertonic, superdominant_ | subdominant, tonic | superdominant)
+h_acc_I = octave_accompaniment + Harmony(tonic | dominant, mediant | (tonic + 12), dominant | (mediant + 12))
+h_acc_V = octave_accompaniment + Harmony(dominant_ | subdominant, supertonic | leading_tone, subdominant | (supertonic + 12))
+h_acc_VI = octave_accompaniment + Harmony(submediant_ | mediant, tonic | dominant, mediant | (tonic + 12))
+h_acc_V_V = octave_accompaniment + Harmony(supertonic_ | supertonic, superdominant_ | subdominant, tonic | superdominant)
 
 phrase_3_acc = (
-    (t_acc_head @ h_acc_V @ (s_accompaniment * len(t_acc_head))) *
-    (t_acc_head @ h_acc_I @ (s_accompaniment * len(t_acc_head))) *
-    (t_acc_head @ h_acc_V @ (s_accompaniment * len(t_acc_head))) *
-    (t_acc_head @ h_acc_I @ (s_accompaniment * len(t_acc_head))) *
-    (t_acc_head @ h_acc_V @ (s_accompaniment * len(t_acc_head))) *
-    (t_acc_head @ h_acc_VI @ (s_accompaniment * len(t_acc_head))) *
-    (t_acc_head @ h_acc_V_V @ (s_accompaniment * len(t_acc_head))) *
-    (t_acc_head @ h_acc_V @ (s_accompaniment * len(t_acc_head)))
+    (t_acc_head @ h_acc_V @ s_accompaniment) *
+    (t_acc_head @ h_acc_I @ s_accompaniment) *
+    (t_acc_head @ h_acc_V @ s_accompaniment) *
+    (t_acc_head @ h_acc_I @ s_accompaniment) *
+    (t_acc_head @ h_acc_V @ s_accompaniment) *
+    (t_acc_head @ h_acc_VI @ s_accompaniment) *
+    (t_acc_head @ h_acc_V_V @ s_accompaniment) *
+    (t_acc_head @ h_acc_V @ s_accompaniment)
 )
+
+
+# ### Accompaniment
+# h_acc_I = octave_accompaniment + Harmony(tonic | dominant, mediant | (tonic + 12), dominant | (mediant + 12), (tonic + 12) | (dominant + 12))
+# h_acc_V = octave_accompaniment + Harmony(dominant_ | subdominant, supertonic | leading_tone, subdominant | (supertonic + 12), (subdominant + 12) | (dominant + 12))
+# h_acc_VI = octave_accompaniment + Harmony(submediant_ | mediant, tonic | dominant, mediant | (tonic + 12), dominant | (mediant + 12))
+# h_acc_V_V = octave_accompaniment + Harmony(supertonic_ | supertonic, superdominant_ | subdominant, tonic | superdominant, subdominant | (supertonic + 12))
+#
+# phrase_3_acc = (
+#     (t_acc_head_bis @ h_acc_V @ s_accompaniment) *
+#     (t_acc_head_bis @ h_acc_I @ s_accompaniment) *
+#     (t_acc_head_bis @ h_acc_V @ s_accompaniment) *
+#     (t_acc_head_bis @ h_acc_I @ s_accompaniment) *
+#     (t_acc_head_bis @ h_acc_V @ s_accompaniment) *
+#     (t_acc_head_bis @ h_acc_VI @ s_accompaniment) *
+#     (t_acc_head_bis @ h_acc_V_V @ s_accompaniment) *
+#     (t_acc_head_bis @ h_acc_V @ s_accompaniment)
+# )
 
 phrase_3 = phrase_3_mel + phrase_3_acc
 
@@ -248,10 +288,9 @@ melody = phrase_1_mel * phrase_2_mel * phrase_3_mel * phrase_4_mel
 accompaniment = phrase_1_acc * phrase_2_acc * phrase_3_acc * phrase_4_acc
 
 piece = phrase_1 * phrase_2 * phrase_3 * phrase_4
-# piece = parallelization(melody, accompaniment)
 
 # Paths
-name = 'ode_melancolie'
+name = Path(__file__).stem
 midi_path = Path(f'../midi/{name}.mid')
 audio_path = Path(f'../audio/{name}.wav')
 
@@ -260,25 +299,16 @@ midi = piece.to_midi(bpm=60*2, velocity=80)
 midi.write(midi_path)
 
 # Render MIDI to audio
-sound_font = 'Arachno'
-
-sound_fonts_paths = {
-    'FluidR3_GM2-2': Path("../../../SoundFonts/FluidR3_GM2-2.sf2"),
-    'GeneralUser': Path("../../../SoundFonts/GeneralUser-GS/GeneralUser-GS.sf2"),
-    'Musyng Kite': Path("../../../SoundFonts/Musyng_Kite/Musyng_Kite.sf2"),
-    'Arachno': Path("../../../SoundFonts/Arachno/Arachno-v1.0.sf2"),
-}
-sf2_path = sound_fonts_paths[sound_font]
-
 render_midi_to_audio(
     midi_path,
     audio_path,
     sf2_path
 )
 
-# Plot
-plot_notes(piece,
-           figsize=(12, 6),
-           x_tick_start=0,
-           x_tick_step=1,)
+plot_notes(piece, figsize=(8, 3), x_tick_start=0, x_tick_step=1)
+plt.tight_layout()
+
+# Save the plot as a vector image (SVG)
+plt.savefig(f'../plots/{name}.svg', format='svg')
+
 plt.show()
