@@ -4,7 +4,7 @@ from musictensors.audio import render_midi_to_audio, sf2_path
 from musictensors.model import Hit, Harmony, Chord, Rhythm, Texture, Pitch, Instrument, Section
 from musictensors.plot import plot_notes, plt
 
-
+Chord.default_velocity = 90
 # Tonic
 D4 = Pitch(62)
 
@@ -74,16 +74,16 @@ leading_tone_ = leading_tone + (-12)
 ## Phrase 1
 t_ph_1 = t_1_a * t_1_b
 h_ph_1_head = Harmony(
-    Chord(mediant),
-    Chord(subdominant),
-    Chord(dominant),
-    Chord(dominant),
-    Chord(subdominant),
-    Chord(mediant),
-    Chord(supertonic),
-    Chord(tonic),
-    Chord(supertonic),
-    Chord(mediant)
+    mediant,
+    subdominant,
+    dominant,
+    dominant,
+    subdominant,
+    mediant,
+    supertonic,
+    tonic,
+    supertonic,
+    mediant
 )
 h_ph_1_tail = Harmony(
     Chord(mediant),
@@ -108,7 +108,8 @@ phrase_1_accompaniment = ((t_1 @ (h_Dmaj7 + h_Bm7 + h_Em7 + h_A7) @ s_piano) *
 
 ### Bass
 t_bass = Texture(Rhythm(Hit('0', '1/2'))) ** 8
-h_bass = octave_2 + Harmony(tonic, submediant_, supertonic, dominant_, mediant, submediant_, supertonic, dominant_)
+h_bass = octave_2 + Harmony(tonic, submediant_, supertonic, dominant_, mediant, submediant_, supertonic, dominant_,
+                            velocity=127)
 phrase_1_bass = t_bass @ h_bass @ bass
 
 ### Full phrase 1
@@ -130,8 +131,8 @@ h_A7 = octave_3 + Harmony(dominant_ | leading_tone_ | supertonic | subdominant)
 phrase_2_melody = t_ph_2 @ h_ph_2 @ saxo
 phrase_2_accompaniment = ((t_1 @ (h_Dmaj7 + h_Bm7 + h_Em7 + h_A7) @ s_piano) *
                           (t_1 @ (h_Dmaj7 + h_Bm7 + h_A7 + h_Dmaj7) @ s_piano))
-h_bass_2 = octave_2 + Harmony(tonic, submediant_, supertonic, dominant_, mediant, submediant_, supertonic, dominant_)
-phrase_2_bass = t_bass @ h_bass @ bass
+h_bass_2 = octave_2 + Harmony(tonic, submediant_, supertonic, dominant_, mediant, submediant_, dominant_, tonic)
+phrase_2_bass = t_bass @ h_bass_2 @ bass
 
 phrase_2 = phrase_2_melody + phrase_2_accompaniment + phrase_2_bass
 
@@ -185,7 +186,7 @@ midi_path = Path(f'../midi/{name}.mid')
 audio_path = Path(f'../audio/{name}.wav')
 
 # Write MIDI
-midi = piece.to_midi(bpm=80*2, velocity=127)
+midi = piece.to_midi(bpm=80*2)
 midi.write(midi_path)
 
 # Render MIDI to audio

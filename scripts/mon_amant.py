@@ -125,13 +125,13 @@ midi_path_accompaniment = Path(f'../midi/{name}-accompaniment.mid')
 audio_path_accompaniment = Path(f'../audio/{name}-accompaniment.wav')
 
 # Write MIDI
-midi = piece.to_midi(bpm=64*3, velocity=80)
+midi = piece.to_midi(bpm=64*3)
 midi.write(midi_path)
 
-midi_harmony = piece_harmony.to_midi(bpm=64*3, velocity=80)
+midi_harmony = piece_harmony.to_midi(bpm=64*3)
 midi_harmony.write(midi_path_harmony)
 
-midi_accompaniment = phrase_2_acc.to_midi(bpm=64*3, velocity=80)
+midi_accompaniment = phrase_2_acc.to_midi(bpm=64*3)
 midi_accompaniment.write(midi_path_accompaniment)
 
 # Render MIDI to audio

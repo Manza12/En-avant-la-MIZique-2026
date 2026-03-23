@@ -168,10 +168,10 @@ audio_path = Path(f'../audio/{name}.wav')
 midi_path_accompaniment = Path(f'../midi/{name}-accompaniment.mid')
 audio_path_accompaniment = Path(f'../audio/{name}-accompaniment.wav')
 
-midi = piece.to_midi(bpm=90*2, velocity=90)
+midi = piece.to_midi(bpm=90*2)
 midi.write(midi_path)
 
-midi_accompaniment = accompaniment.to_midi(bpm=90*2, velocity=90)
+midi_accompaniment = accompaniment.to_midi(bpm=90*2)
 midi_accompaniment.write(midi_path_accompaniment)
 
 render_midi_to_audio(midi_path, audio_path, sf2_path)

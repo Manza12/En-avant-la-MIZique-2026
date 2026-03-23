@@ -109,7 +109,7 @@ name       = 'random_piece'
 midi_path  = Path(f'../midi/{name}.mid')
 audio_path = Path(f'../audio/{name}.wav')
 
-midi = piece.to_midi(bpm=BPM, velocity=80)
+midi = piece.to_midi(bpm=BPM)
 midi.write(midi_path)
 
 render_midi_to_audio(midi_path, audio_path, sf2_path)

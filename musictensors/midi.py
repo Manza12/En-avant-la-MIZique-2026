@@ -1,4 +1,4 @@
-def to_midi(notes, velocity=64, bpm=100):
+def to_midi(notes, bpm=100):
     import pretty_midi
     notes = notes
     start = min(note.onset for note in notes)
@@ -13,7 +13,7 @@ def to_midi(notes, velocity=64, bpm=100):
             onset_s = float((note.onset - start) * 240 / bpm)
             duration_s = float(note.duration * 240 / bpm)
             end_s = onset_s + duration_s
-            note = pretty_midi.Note(velocity=velocity, pitch=note.pitch.number, start=onset_s, end=end_s)
+            note = pretty_midi.Note(velocity=note.velocity, pitch=note.pitch.number, start=onset_s, end=end_s)
             track.notes.append(note)
         midi.instruments.append(track)
     return midi

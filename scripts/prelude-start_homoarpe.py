@@ -252,7 +252,7 @@ midi_path  = Path(f'../midi/{name}.mid')
 audio_path = Path(f'../audio/{name}.wav')
 
 start = time()
-midi = piece.to_midi(bpm=72, velocity=90)
+midi = piece.to_midi(bpm=72)
 midi.write(midi_path)
 end = time()
 print(f"Wrote MIDI in {end - start:.3f} seconds")

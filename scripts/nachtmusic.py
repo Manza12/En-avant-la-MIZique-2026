@@ -260,10 +260,10 @@ midi_path_harmony = Path(f'../midi/{name}-harmony.mid')
 audio_path_harmony = Path(f'../audio/{name}-harmony.wav')
 
 # Write MIDI
-midi = piece.to_midi(bpm=80*2, velocity=90)
+midi = piece.to_midi(bpm=80*2)
 midi.write(midi_path)
 
-midi_harmony = piece_harmony.to_midi(bpm=80*2, velocity=90)
+midi_harmony = piece_harmony.to_midi(bpm=80*2)
 midi_harmony.write(midi_path_harmony)
 
 # Render MIDI to audio

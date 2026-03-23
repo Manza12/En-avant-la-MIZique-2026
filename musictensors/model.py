@@ -218,7 +218,7 @@ class Pitch:
     def __add__(self, other: 'Chord') -> 'Chord':
         if len(other.pitches) == 0:
             return Chord()
-        return Chord({self + p for p in other.pitches})
+        return Chord({self + p for p in other.pitches}, velocity=other.velocity)
 
     @multimethod
     def __add__(self, other: 'Harmony') -> 'Harmony':
@@ -250,38 +250,45 @@ class Pitch:
 
 
 class Chord:
+    default_velocity = 90
+
     @multimethod
-    def __init__(self):
+    def __init__(self, velocity: int = None):
         self.pitches = set()
+        self.velocity = velocity if velocity is not None else self.default_velocity
 
     @multimethod
     def __init__(self, chord: 'Chord'):
         self.pitches = {p for p in chord.pitches}
+        self.velocity = chord.velocity
 
     @multimethod
-    def __init__(self, pitches: Set[Pitch]):
+    def __init__(self, pitches: Set[Pitch], velocity: int = None):
         self.pitches = pitches
+        self.velocity = velocity if velocity is not None else self.default_velocity
 
     @multimethod
-    def __init__(self, *pitches: Pitch):
+    def __init__(self, *pitches: Pitch, velocity: int = None):
         self.pitches = set(pitches)
+        self.velocity = velocity if velocity is not None else self.default_velocity
 
     @multimethod
-    def __init__(self, pitches: Set[int]):
+    def __init__(self, pitches: Set[int], velocity: int = None):
         self.pitches = {Pitch(p) for p in pitches}
+        self.velocity = velocity if velocity is not None else self.default_velocity
 
     def __add__(self, other: int) -> 'Chord':
-        return Chord({p + other for p in self.pitches})
+        return Chord({p + other for p in self.pitches}, velocity=self.velocity)
 
     def __sub__(self, other: int) -> 'Chord':
-        return Chord({p - other for p in self.pitches})
+        return Chord({p - other for p in self.pitches}, velocity=self.velocity)
 
     def __or__(self, other: 'Chord') -> 'Chord':
-        return Chord(self.pitches | other.pitches)
+        return Chord(self.pitches | other.pitches, velocity=max(self.velocity, other.velocity))
 
     def __getitem__(self, key):
         ordered_pitches = sorted(list(self.pitches))
-        return Chord({ordered_pitches[i] for i in key})
+        return Chord({ordered_pitches[i] for i in key}, velocity=self.velocity)
 
     def __eq__(self, other):
         if not isinstance(other, Chord):
@@ -325,20 +332,23 @@ class Harmony:
         self.chords = [c for c in harmony.chords]
 
     @multimethod
-    def __init__(self, chords: List[Chord]):
+    def __init__(self, chords: List[Chord], velocity: int = None):
         self.chords = chords
+        if velocity is not None:
+            for c in self.chords:
+                c.velocity = velocity
 
     @multimethod
-    def __init__(self, *chords: Chord):
-        self.chords = list(chords)
+    def __init__(self, *chords: Chord, velocity: int = None):
+        self.__init__(list(chords), velocity=velocity)
 
     @multimethod
-    def __init__(self, chords: List[Set[int]]):
-        self.chords = [Chord(c) for c in chords]
+    def __init__(self, chords: List[Set[int]], velocity: int = Chord.default_velocity):
+        self.chords = [Chord(c, velocity=velocity) for c in chords]
 
-    @multimethod
-    def __init__(self, *chords: Union[Chord, Set[Pitch], Set[int]]):
-        self.chords = [Chord(c) for c in chords]
+    # @multimethod
+    # def __init__(self, *chords: Union[Chord, Set[Pitch], Set[int]], velocity: int = Chord.default_velocity):
+    #     self.chords = [Chord(c) for c in chords]
 
     @multimethod
     def __add__(self, other: 'Harmony') -> 'Harmony':
@@ -383,10 +393,10 @@ class Harmony:
     @classmethod
     def from_chord(cls, chord: Chord):
         ordered_pitches = sorted(chord.pitches, key=lambda p: p.number)
-        return Harmony([Chord(c) for c in ordered_pitches])
+        return Harmony([Chord(c, velocity=chord.velocity) for c in ordered_pitches])
 
     @classmethod
-    def from_roman_numeral(cls, roman_numeral: str, factors: List[str], octave: int = 0):
+    def from_roman_numeral(cls, roman_numeral: str, factors: List[str], octave: int = 0, velocity: int = Chord.default_velocity):
         roman_numeral_dict = ROMAN_NUMERAL_TO_FACTORS[roman_numeral]
         shifts = list(roman_numeral_dict.values())
         keys = list(roman_numeral_dict.keys())
@@ -401,7 +411,7 @@ class Harmony:
                 cum_shift += shifts_spacing[i]
                 i = (i + 1) % n
 
-            chord = Chord(Pitch(root + cum_shift + 12 * octave))
+            chord = Chord(Pitch(root + cum_shift + 12 * octave), velocity=velocity)
             chords.append(chord)
 
             if f < len(factors) - 1 and factors[f + 1] == '-':
@@ -527,11 +537,12 @@ class Orchestration:
 
 # Time-Frequency
 class Note:
-    def __init__(self, pitch: Pitch, onset: frac, duration: frac, instrument: Instrument):
+    def __init__(self, pitch: Pitch, onset: frac, duration: frac, instrument: Instrument, velocity: int):
         self.pitch = pitch
         self.onset = onset
         self.duration = duration
         self.instrument = instrument
+        self.velocity = velocity
 
     def __eq__(self, other):
         if not isinstance(other, Note):
@@ -627,16 +638,16 @@ class HarmonicTexture:
         for rhythm, chord in zip(self.texture.rhythms, self.harmony.chords):
             for hit in rhythm.hits:
                 for pitch in chord.pitches:
-                    result.add(Note(pitch, hit.onset, hit.duration, instrument))
+                    result.add(Note(pitch, hit.onset, hit.duration, instrument, chord.velocity))
         return result
 
     def ordered_notes(self, instrument_name: str = 'Acoustic Grand Piano'):
         notes = self.notes(instrument_name)
         return sorted(notes, key=lambda note: (note.onset, note.pitch.number))
 
-    def to_midi(self, velocity=64, bpm=100):
+    def to_midi(self, bpm=100):
         from .midi import to_midi
-        return to_midi(self.notes(), velocity, bpm)
+        return to_midi(self.notes(), bpm)
 
 
 class HarmonicOrchestration:
@@ -799,13 +810,13 @@ class ScoreTensor:
             for hit in rhythm.hits:
                 for pitch in chord.pitches:
                     for instrument in group.instruments:
-                        result.add(Note(pitch, hit.onset, hit.duration, instrument))
+                        result.add(Note(pitch, hit.onset, hit.duration, instrument, chord.velocity))
         return result
 
     def ordered_notes(self) -> List['Note']:
         notes = self.notes()
         return sorted(notes, key=lambda note: (note.onset, note.pitch.number))
 
-    def to_midi(self, velocity=64, bpm=100):
+    def to_midi(self, bpm=100):
         from .midi import to_midi
-        return to_midi(self.notes(), velocity, bpm)
+        return to_midi(self.notes(), bpm)

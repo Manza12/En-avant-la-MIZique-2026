@@ -295,7 +295,7 @@ midi_path = Path(f'../midi/{name}.mid')
 audio_path = Path(f'../audio/{name}.wav')
 
 # Write MIDI
-midi = piece.to_midi(bpm=60*2, velocity=80)
+midi = piece.to_midi(bpm=60*2)
 midi.write(midi_path)
 
 # Render MIDI to audio
