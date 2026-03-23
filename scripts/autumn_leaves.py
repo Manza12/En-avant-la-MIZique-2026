@@ -1,7 +1,7 @@
 from pathlib import Path
 from time import time
 
-from musictensors.audio import render_midi_to_audio
+from musictensors.audio import render_midi_to_audio, sf2_path
 from musictensors.model import Hit, Harmony, Chord, Rhythm, Texture, Pitch, Instrument
 from musictensors.plot import plot_notes, plt
 
@@ -162,29 +162,20 @@ print(f"Generated piece in {end - start:.3f} seconds")
 # RENDER
 # =============================================================================
 
-name = 'autumn_leaves'
+name = Path(__file__).stem
 midi_path  = Path(f'../midi/{name}.mid')
 audio_path = Path(f'../audio/{name}.wav')
+midi_path_accompaniment = Path(f'../midi/{name}-accompaniment.mid')
+audio_path_accompaniment = Path(f'../audio/{name}-accompaniment.wav')
 
-start = time()
 midi = piece.to_midi(bpm=90*2, velocity=90)
 midi.write(midi_path)
-end = time()
-print(f"Wrote MIDI in {end - start:.3f} seconds")
 
-sound_fonts_paths = {
-    'FluidR3_GM2-2': Path("../../../SoundFonts/FluidR3_GM2-2.sf2"),
-    'GeneralUser':   Path("../../../SoundFonts/GeneralUser-GS/GeneralUser-GS.sf2"),
-    'Musyng Kite':   Path("../../../SoundFonts/Musyng_Kite/Musyng_Kite.sf2"),
-    'Arachno':       Path("../../../SoundFonts/Arachno/Arachno-v1.0.sf2"),
-}
+midi_accompaniment = accompaniment.to_midi(bpm=90*2, velocity=90)
+midi_accompaniment.write(midi_path_accompaniment)
 
-sf2_path = sound_fonts_paths['Arachno']
-
-start = time()
 render_midi_to_audio(midi_path, audio_path, sf2_path)
-end = time()
-print(f"Rendered audio in {end - start:.3f} seconds")
+render_midi_to_audio(midi_path_accompaniment, audio_path_accompaniment, sf2_path)
 
 plot_notes(piece, figsize=(9, 4), x_tick_start=0, x_tick_step=1)
 plt.show()
