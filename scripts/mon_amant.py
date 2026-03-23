@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from musictensors.audio import render_midi_to_audio, sf2_path
-from musictensors.model import Hit, Harmony, Chord, Rhythm, Texture, Pitch, Instrument, Section
+from musictensors.model import Hit, Harmony, Chord, Rhythm, Texture, Pitch, Instrument
 from musictensors.plot import plot_notes, plt
 from musictensors import frac
 
@@ -109,7 +109,7 @@ phrase_2_acc = (t_vals ** 15 @ (h_I + h_I46 + h_I + h_I46 + h_IV + h_V7 + h_I + 
 ## Full piece
 piece = phrase_2_melody + phrase_2_acc
 
-## Only harmony
+## Harmony
 piece_harmony = t_unit ** 15 @ (h_I + h_I46 + h_I + h_I46 + h_IV + h_V7 + h_I + h_I46 +
                                 h_I + h_I + h_IV + h_II + h_V7 + h_V7 + h_I) @ piano
 
@@ -117,8 +117,12 @@ piece_harmony = t_unit ** 15 @ (h_I + h_I46 + h_I + h_I46 + h_IV + h_V7 + h_I + 
 name = Path(__file__).stem
 midi_path = Path(f'../midi/{name}.mid')
 audio_path = Path(f'../audio/{name}.wav')
+
 midi_path_harmony = Path(f'../midi/{name}-harmony.mid')
 audio_path_harmony = Path(f'../audio/{name}-harmony.wav')
+
+midi_path_accompaniment = Path(f'../midi/{name}-accompaniment.mid')
+audio_path_accompaniment = Path(f'../audio/{name}-accompaniment.wav')
 
 # Write MIDI
 midi = piece.to_midi(bpm=64*3, velocity=80)
@@ -126,6 +130,9 @@ midi.write(midi_path)
 
 midi_harmony = piece_harmony.to_midi(bpm=64*3, velocity=80)
 midi_harmony.write(midi_path_harmony)
+
+midi_accompaniment = phrase_2_acc.to_midi(bpm=64*3, velocity=80)
+midi_accompaniment.write(midi_path_accompaniment)
 
 # Render MIDI to audio
 render_midi_to_audio(
@@ -137,6 +144,12 @@ render_midi_to_audio(
 render_midi_to_audio(
     midi_path_harmony,
     audio_path_harmony,
+    sf2_path
+)
+
+render_midi_to_audio(
+    midi_path_accompaniment,
+    audio_path_accompaniment,
     sf2_path
 )
 
