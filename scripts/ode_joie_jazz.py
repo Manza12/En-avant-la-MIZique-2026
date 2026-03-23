@@ -5,6 +5,7 @@ from musictensors.model import Hit, Harmony, Chord, Rhythm, Texture, Pitch, Inst
 from musictensors.plot import plot_notes, plt
 
 Chord.default_velocity = 90
+
 # Tonic
 D4 = Pitch(62)
 
@@ -43,6 +44,30 @@ t_2_b = Texture(
     Rhythm(Hit('14/12', '2/12'), Hit('17/12', '7/12')),
     # Rhythm(Hit('18/12', '6/12')),
 )
+
+t_3_a = Texture(
+    Rhythm(Hit('0', '5/12'), Hit('5/12', '1/12')),
+    Rhythm(Hit('6/12', '2/12')),
+    Rhythm(Hit('8/12', '3/12')),
+    Rhythm(Hit('14/12', '1/12')),
+    Rhythm(Hit('15/12', '2/12')),
+    Rhythm(Hit('17/12', '1/12')),
+    Rhythm(Hit('18/12', '2/12')),
+    Rhythm(Hit('20/12', '4/12')),
+)
+t_3_b = Texture(
+    Rhythm(Hit('2/12', '1/12')),
+    Rhythm(Hit('3/12', '2/12')),
+    Rhythm(Hit('5/12', '1/12')),
+    Rhythm(Hit('6/12', '2/12')),
+    Rhythm(Hit('8/12', '3/12')),
+    Rhythm(Hit('11/12', '3/12')),
+    Rhythm(Hit('14/12', '3/12')),
+    Rhythm(Hit('17/12', '3/12')),
+    Rhythm(Hit('20/12', '4/12')),
+)
+
+t_3 = t_3_a * t_3_b
 
 
 # Orquestration
@@ -108,8 +133,7 @@ phrase_1_accompaniment = ((t_1 @ (h_Dmaj7 + h_Bm7 + h_Em7 + h_A7) @ s_piano) *
 
 ### Bass
 t_bass = Texture(Rhythm(Hit('0', '1/2'))) ** 8
-h_bass = octave_2 + Harmony(tonic, submediant_, supertonic, dominant_, mediant, submediant_, supertonic, dominant_,
-                            velocity=127)
+h_bass = octave_2 + Harmony(tonic, submediant_, supertonic, dominant_, mediant, submediant_, supertonic, dominant_,)
 phrase_1_bass = t_bass @ h_bass @ bass
 
 ### Full phrase 1
@@ -136,49 +160,42 @@ phrase_2_bass = t_bass @ h_bass_2 @ bass
 
 phrase_2 = phrase_2_melody + phrase_2_accompaniment + phrase_2_bass
 
-# ## Phrase 3
-# t_ph_3 = t_1 * t_4 * t_4 * t_2_bis
+## Phrase 3
+t_ph_3 = t_3_a * t_3_b
+h_ph_3_1 = Harmony(Chord(supertonic), Chord(mediant), Chord(tonic))
+h_ph_3_2 = Harmony(Chord(supertonic), Chord(mediant), Chord(subdominant), Chord(mediant), Chord(tonic))
+h_ph_3_3 = Harmony(Chord(supertonic), Chord(mediant), Chord(subdominant), Chord(mediant), Chord(supertonic))
+h_ph_3_4 = Harmony(Chord(tonic), Chord(supertonic), Chord(dominant_), Chord(mediant))
+
+h_ph_3 = h_ph_3_1 + h_ph_3_2 + h_ph_3_3 + h_ph_3_4
+h_ph_3 = octave_4 + h_ph_3
+
+phrase_3_melody = t_ph_3 @ h_ph_3 @ saxo
+
+# ### Accompaniment
+# t_1 = Texture(Rhythm(Hit('0', '5/12')), Rhythm(Hit('5/12', '7/12'))) ** 2
 #
-# h_ph_3_1 = Harmony(Chord(supertonic), Chord(mediant), Chord(tonic))
-# h_ph_3_2 = Harmony(Chord(supertonic), Chord(mediant), Chord(subdominant), Chord(tonic))
-# h_ph_3_3 = Harmony(Chord(supertonic), Chord(mediant), Chord(subdominant), Chord(supertonic))
-# h_ph_3_4 = Harmony(Chord(tonic), Chord(supertonic), Chord(dominant_), Chord(mediant))
+# h_Dmaj7 = octave_3 + Harmony(tonic | mediant | dominant | leading_tone)
+# h_Fsm7 = octave_3 + Harmony(mediant | dominant | leading_tone | supertonic + 12)
+# h_Bm7 = octave_3 + Harmony(submediant_ | tonic | mediant | dominant)
+# h_Em7 = octave_3 + Harmony(supertonic | subdominant | submediant | tonic + 12)
+# h_A7 = octave_3 + Harmony(dominant_ | leading_tone_ | supertonic | subdominant)
 #
-# h_ph_3 = h_ph_3_1 + h_ph_3_2 + h_ph_3_3 + h_ph_3_4
-# h_ph_3 = octave_2 + (h_ph_3 | (h_ph_3 + 12))
+# phrase_1_accompaniment = ((t_1 @ (h_Dmaj7 + h_Bm7 + h_Em7 + h_A7) @ s_piano) *
+#                           (t_1 @ (h_Fsm7 + h_Bm7 + h_Em7 + h_A7) @ s_piano))
 #
-# phrase_3 = t_ph_3 @ h_ph_3 @ (s_piano * len(t_ph_3))
-# phrase_3.end -= frac(1, 4)
-#
-# ## Phrase 4
-# t_ph_4 = t_1_bis * t_2 * t_1 * t_3
-#
-# h_ph_3_1 = Harmony(Chord(supertonic), Chord(mediant), Chord(tonic))
-# h_ph_3_2 = Harmony(Chord(supertonic), Chord(mediant), Chord(subdominant), Chord(tonic))
-# h_ph_3_3 = Harmony(Chord(supertonic), Chord(mediant), Chord(subdominant), Chord(supertonic))
-# h_ph_3_4 = Harmony(Chord(tonic), Chord(supertonic), Chord(dominant_), Chord(mediant))
-#
-# h_ph_4 = Harmony(
-#     Chord(mediant),
-#     Chord(subdominant),
-#     Chord(dominant),
-#     Chord(dominant),
-#     Chord(subdominant),
-#     Chord(mediant),
-#     Chord(supertonic),
-#     Chord(tonic),
-#     Chord(supertonic),
-#     Chord(mediant),
-#     Chord(supertonic),
-#     Chord(tonic),
-# )
-# h_ph_4 = octave_2 + (h_ph_4 | (h_ph_4 + 12))
-#
-# phrase_4 = t_ph_4 @ h_ph_4 @ (s_piano * len(t_ph_4))
+# ### Bass
+# t_bass = Texture(Rhythm(Hit('0', '1/2'))) ** 8
+# h_bass = octave_2 + Harmony(tonic, submediant_, supertonic, dominant_, mediant, submediant_, supertonic, dominant_,
+#                             velocity=127)
+# phrase_1_bass = t_bass @ h_bass @ bass
+
+### Full phrase 3
+phrase_3 = phrase_3_melody # + phrase_3_accompaniment + phrase_3_bass
 
 
 ## Full piece
-piece = phrase_1 * phrase_2  # * phrase_3 * phrase_4
+piece = phrase_1 * phrase_2 * phrase_3 * phrase_2
 
 # Paths
 name = Path(__file__).stem
