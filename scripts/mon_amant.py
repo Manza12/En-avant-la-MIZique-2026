@@ -35,6 +35,7 @@ t_dotted_half = Texture(Rhythm(Hit('0', '3/4')))
 
 # Orquestration
 piano = Instrument('Acoustic Grand Piano')
+violin = Instrument('Violin')
 
 # Harmony
 silence = Chord()
@@ -97,7 +98,7 @@ h_melody_3 = octave_5 + Harmony(submediant, subdominant, dominant, submediant, d
 phrase_2_melody = (((t_melody_1 + frac(-1, 4)) @ h_melody_1) *
                    (t_melody_2 @ h_melody_2) *
                    ((t_half * t_melody_1) @ (Harmony(silence) + h_melody_1)) *
-                   (t_melody_3 @ h_melody_3)) @ piano
+                   (t_melody_3 @ h_melody_3)) @ violin
 # phrase_2_melody -= frac(1, 4)
 
 

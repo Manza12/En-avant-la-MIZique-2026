@@ -85,6 +85,7 @@ t_bass = Texture(R_6)
 # ========== #
 
 piano = Instrument('Acoustic Grand Piano')
+saxo = Instrument('Alto Sax')
 
 # ======= #
 # HARMONY #
@@ -102,22 +103,22 @@ octave_6 = E4 + 12 * 2
 
 # === Melody === #
 h_0 = Harmony(Chord())
-m_0 = (Texture(R_1) @ h_0) @ piano
+m_0 = (Texture(R_1) @ h_0) @ saxo
 
-h_1 = octave_3 + Harmony(tonic, supertonic, mediant, submediant)
-m_1 = (t_1 @ h_1) @ piano
+h_1 = octave_4 + Harmony(tonic, supertonic, mediant, submediant)
+m_1 = (t_1 @ h_1) @ saxo
 
-h_2 = octave_3 + Harmony(subtonic_1, tonic, supertonic, dominant)
-m_2 = (t_2 @ h_2) @ piano
+h_2 = octave_4 + Harmony(subtonic_1, tonic, supertonic, dominant)
+m_2 = (t_2 @ h_2) @ saxo
 
-h_3 = octave_3 + Harmony(submediant_1, subtonic_1, tonic, subdominant)
-m_3 = (t_1 @ h_3) @ piano
+h_3 = octave_4 + Harmony(submediant_1, subtonic_1, tonic, subdominant)
+m_3 = (t_1 @ h_3) @ saxo
 
-h_4 = octave_3 + Harmony(dominant_1, sharp_sixth_1, leading_tone_1, mediant)
-m_4 = (t_3 @ h_4) @ piano
+h_4 = octave_4 + Harmony(dominant_1, sharp_sixth_1, leading_tone_1, mediant)
+m_4 = (t_3 @ h_4) @ saxo
 
-h_5 = octave_3 + Harmony(supertonic, subdominant, mediant, tonic)
-m_5 = (t_1 @ h_5) @ piano
+h_5 = octave_4 + Harmony(supertonic, subdominant, mediant, tonic)
+m_5 = (t_1 @ h_5) @ saxo
 
 melody = m_0 * m_1 * m_2 * m_3 * m_4 * m_0 * m_1 * m_2 * m_3 * m_5
 

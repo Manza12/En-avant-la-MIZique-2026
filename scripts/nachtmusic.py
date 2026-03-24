@@ -115,7 +115,7 @@ m_2 = m_2_vln + m_2_vla + m_2_bass
 ### Measure 3
 h = Harmony(subdominant, supertonic)
 
-m_3_vln = (t_1 @ (octave_5 + h)) ** 2 @ viola
+m_3_vln = (t_1 @ (octave_5 + h)) ** 2 @ violin
 m_3_vla = (t_1 @ (octave_4 + h)) ** 2 @ viola
 m_3_bass = (t_1 @ (octave_3 + h)) ** 2 @ bass
 
@@ -159,6 +159,28 @@ ph_2 = ph_2_mel + ph_2_acc
 
 # Full piece
 piece = ph_1 * ph_2
+
+
+# Paths
+name = Path(__file__).stem
+midi_path = Path(f'../midi/{name}.mid')
+audio_path = Path(f'../audio/{name}.wav')
+
+midi_path_harmony = Path(f'../midi/{name}-harmony.mid')
+audio_path_harmony = Path(f'../audio/{name}-harmony.wav')
+
+# Write MIDI
+midi = piece.to_midi(bpm=80*2)
+midi.write(midi_path)
+
+# Render MIDI to audio
+render_midi_to_audio(
+    midi_path,
+    audio_path,
+    sf2_path
+)
+
+
 
 # Only harmony
 t_half_2 = Texture(Rhythm(Hit('0', '1/2'))) * 2
@@ -251,34 +273,14 @@ ph_2 = ph_2_mel + ph_2_acc
 # Full piece
 piece_harmony = ph_1 * ph_2
 
-# Paths
-name = Path(__file__).stem
-midi_path = Path(f'../midi/{name}.mid')
-audio_path = Path(f'../audio/{name}.wav')
-
-midi_path_harmony = Path(f'../midi/{name}-harmony.mid')
-audio_path_harmony = Path(f'../audio/{name}-harmony.wav')
-
-# Write MIDI
-midi = piece.to_midi(bpm=80*2)
-midi.write(midi_path)
-
 midi_harmony = piece_harmony.to_midi(bpm=80*2)
 midi_harmony.write(midi_path_harmony)
-
-# Render MIDI to audio
-render_midi_to_audio(
-    midi_path,
-    audio_path,
-    sf2_path
-)
 
 render_midi_to_audio(
     midi_path_harmony,
     audio_path_harmony,
     sf2_path
 )
-
 # Plot
 plot_notes(piece,
            figsize=(12, 6),
