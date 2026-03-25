@@ -358,6 +358,10 @@ class Harmony:
     def __add__(self, other: int) -> 'Harmony':
         return Harmony(*[c + other for c in self.chords])
 
+    def __sub__(self, other: int) -> 'Harmony':
+        assert type(other) == int, "The parameter 'other' must be an integer."
+        return Harmony(*[c - other for c in self.chords])
+
     @multimethod
     def __matmul__(self, texture: Texture) -> 'HarmonicTexture':
         return HarmonicTexture(self, texture)
@@ -428,6 +432,12 @@ class Harmony:
     def permute(self, permutation: List[int]):
         assert len(permutation) == len(self)
         return Harmony([self.chords[i] for i in permutation])
+
+    def flat(self) -> 'Harmony':
+        flatten_chord = Chord()
+        for chord in self.chords:
+            flatten_chord = flatten_chord | chord
+        return Harmony([flatten_chord])
 
     def __reversed__(self):
         return Harmony(list(reversed(self.chords)))

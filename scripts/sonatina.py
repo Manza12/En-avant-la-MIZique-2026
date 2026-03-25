@@ -3,18 +3,20 @@ from pathlib import Path
 from musictensors.audio import render_midi_to_audio, sf2_path
 from musictensors.model import Hit, Harmony, Chord, Rhythm, Texture, Pitch, Instrument
 from musictensors.plot import plot_notes, plt
+from musictensors import frac
 
 Chord.default_velocity = 90
 
 # Tonic
 G4 = Pitch(67)
 
-# Octaves
-octave_4 = G4
-octave_3 = G4 - 12
-octave_2 = G4 - 12 * 2
-octave_5 = G4 + 12
-octave_6 = G4 + 12 * 2
+# Keys
+tonic_4 = G4
+tonic_3 = G4 - 12
+
+dominant_5 = tonic_4 + 7
+dominant_4 = tonic_3 + 7
+dominant_3 = tonic_3 - 5
 
 # Orquestration
 piano = Instrument('Acoustic Grand Piano')
@@ -36,7 +38,8 @@ t_sixteenth = Texture(Rhythm(Hit('0', '1/16')))
 t_3_quarters = t_quarter ** 3
 t_half_quarter = t_half * t_quarter
 t_6_eighths = t_eighth ** 6
-t_2_quarter_p = t_quarter + t_quarter
+
+t_2_quarter_p = Texture(Rhythm(Hit('0', '1/4'), Hit('1/4', '1/4')))
 
 ## Melodic textures
 ### Theme A
@@ -47,18 +50,19 @@ t_theme_B_head = t_4_12 * t_triplet_eighth ** 5
 t_theme_B_head_bis = t_5_16 * t_sixteenth ** 7
 t_theme_B2_1 = t_quarter * t_sixteenth ** 4 * t_dotted_eighth * t_sixteenth
 t_theme_B2_2 = t_quarter * t_eighth * t_sixteenth ** 6
-t_theme_B2_3 = t_eighth ** 2
+t_theme_B2_3 = t_eighth ** 2 * t_2_quarter_p
+t_theme_B2_4 = t_eighth * t_sixteenth ** 10
+t_coup = t_quarter * t_quarter
+t_coup.end += frac(1, 4)
 
-((t_theme_B_head * t_half_quarter @ h_theme_B_1) *
-            (t_theme_B_head_bis * t_half_quarter @ h_theme_B_2) *
-            (t_theme_B_head_bis * t_6_eighths @ h_theme_B_3) *
-            (t_theme_B2_1 @ h_theme_B2_1) *
-            (t_theme_B2_2 @ h_theme_B2_2) *
-            (t_theme_B2_3 @ h_theme_B2_3) *
-            (t_theme_B2_4 @ h_theme_B2_4) *
-            (t_theme_B2_4 @ h_theme_B2_5) *
-            (t_coup @ h_I_coup_mel))
-
+t_acc_B_head = Texture(Rhythm(Hit('1/4', '1/4'), Hit('2/4', '1/4')))
+t_acc_B_tail = Texture(Rhythm(Hit('0', '1/4'), Hit('1/4', '1/4')))
+t_acc_B_tail.end += frac(1, 4)
+t_acc_B_tail_prime = Texture(t_quarter)
+t_acc_B_tail_prime.end += frac(2, 4)
+t_cad_1 = Texture(Rhythm(Hit('0', '1/4'), Hit('2/4', '1/4')), Rhythm(Hit('1/4', '1/4')))
+t_eighth_full = Texture(t_eighth)
+t_eighth_full.end = frac(3, 4)
 
 ## Accompaniment textures
 t_alberti_1 = Texture(
@@ -84,14 +88,10 @@ t_alberti_cad = Texture(
     Rhythm(Hit('1/8', '1/8'), Hit('3/8', '1/8')),
 )
 
-
-
-
-
-
-
 # Harmony
 ## Tonal degrees
+silence = Chord()
+
 tonic = Chord({0})
 supertonic = Chord({2})
 mediant = Chord({4})
@@ -111,17 +111,46 @@ dominant_ = dominant + (-12)
 submediant_ = submediant + (-12)
 leading_tone_ = leading_tone + (-12)
 
-h_I = octave_3 + Harmony(tonic, mediant, dominant)
-h_Ino3 = octave_3 + Harmony(tonic, dominant)
-h_V34 = octave_3 + Harmony(supertonic, subdominant, dominant)
-h_V6 = octave_3 + Harmony(leading_tone_, supertonic, dominant)
-h_V_prime = octave_3 + Harmony(dominant_, tritone, dominant)
+## Chord harmonies
+h_I = Harmony(tonic, mediant, dominant)
+h_Ino3 = Harmony(tonic, dominant)
+h_V34 = Harmony(supertonic, subdominant, dominant)
+h_V6 = Harmony(leading_tone_, supertonic, dominant)
+h_V_prime = Harmony(dominant_, tritone, dominant)
+h_iino5 = Harmony(supertonic, subdominant)
+h_Ino5 = Harmony(tonic, mediant)
+h_viino5 = Harmony(leading_tone_, supertonic)
+h_vii = Harmony(leading_tone_, supertonic, subdominant)
+h_Ino1 = Harmony(mediant, dominant)
+h_IVno5 = Harmony(subdominant, submediant)
+h_dom8 = Harmony(dominant_, dominant)
+h_ton8 = Harmony(tonic, tonic + 12)
+h_ton = Harmony(tonic)
+h_V7no35 = Harmony(dominant_, subdominant)
 
 ## Theme A
-h_theme_A_1 = octave_4 + Harmony(tonic, mediant, tonic, mediant, dominant, dominant, dominant)
-h_theme_A_2 = octave_4 + Harmony(dominant, mediant + 12, supertonic + 12, tonic + 12, tonic + 12, leading_tone)
-h_theme_A_3 = octave_4 + Harmony(supertonic + 12, leading_tone, dominant, subdominant, supertonic_sharp, mediant, submediant, dominant, mediant, tonic)
-h_theme_A_4 = octave_4 + Harmony(leading_tone_, leading_tone_ | subdominant, tonic | mediant, tonic | mediant, leading_tone_ | supertonic)
+### Melody
+h_theme_A_1 = tonic_4 + Harmony(tonic, mediant, tonic, mediant, dominant, dominant, dominant)
+h_theme_A_2 = tonic_4 + Harmony(dominant, mediant + 12, supertonic + 12, tonic + 12, tonic + 12, leading_tone)
+h_theme_A_3 = tonic_4 + Harmony(supertonic + 12, leading_tone, dominant, subdominant, supertonic_sharp, mediant, submediant, dominant, mediant, tonic)
+h_theme_A_4 = tonic_4 + Harmony(leading_tone_, leading_tone_ | subdominant, tonic | mediant, tonic | mediant, leading_tone_ | supertonic)
+
+## Theme B
+### Melody
+h_theme_B_1 = dominant_5 + Harmony(dominant_, submediant_, leading_tone_, tonic, supertonic, mediant, dominant, subdominant)
+h_theme_B_2 = dominant_5 + Harmony(dominant_, submediant_, leading_tone_, tonic, supertonic, mediant, subdominant, dominant, submediant, dominant)
+h_theme_B_3 = dominant_5 + Harmony(tonic, supertonic, mediant, subdominant, dominant, submediant, leading_tone, tonic + 12,
+                                   leading_tone, submediant, dominant, subdominant, mediant, supertonic)
+h_theme_B2_1 = dominant_5 + Harmony(tonic, supertonic, tonic, leading_tone_, tonic, mediant, supertonic)
+h_theme_B2_2 = dominant_5 + Harmony(tonic, silence, mediant, supertonic, tonic, leading_tone_, submediant_, dominant_)
+h_theme_B2_3 = dominant_5 + Harmony(subdominant_, silence, supertonic_ | subdominant_)
+h_theme_B2_4 = dominant_5 + Harmony(mediant_, dominant, subdominant, mediant, supertonic, tonic, leading_tone_, submediant_, dominant_, subdominant_, mediant_)
+h_theme_B2_5 = dominant_5 + Harmony(supertonic_, subdominant, mediant, supertonic, tonic, leading_tone_, submediant_, dominant_, subdominant_, mediant_, supertonic_)
+h_I_coup_mel = dominant_4 + Harmony(tonic, mediant | dominant | (tonic + 12))
+
+### Accompaniment
+h_I_coup_acc = dominant_3 + Harmony(tonic | mediant, tonic - 12 | tonic)
+h_theme_B2_acc = dominant_3 + Harmony(silence, dominant_, submediant_, leading_tone_, tonic, supertonic, mediant, subdominant, dominant, submediant, leading_tone)
 
 # Structure
 ## Theme A
@@ -132,14 +161,14 @@ melody_1 = ((t_theme_A_head * t_3_quarters @ h_theme_A_1) *
             (t_3_quarters * t_half_quarter @ h_theme_A_4))
 
 ### Accompaniment
-accompaniment_1 = ((t_alberti_1 ** 2 @ (h_I * 2)) *
-                   (t_alberti_1 ** 2 @ (h_I + h_V34)) *
-                   (t_alberti_1 ** 2 @ (h_V6 + h_I)) *
-                   (t_alberti_2_a * t_alberti_2_b * t_alberti_cad @ (h_V34 + h_Ino3 + h_V_prime)))
+accompaniment_1 = ((t_alberti_1 ** 2 @ ((tonic_3 + h_I) * 2)) *
+                   (t_alberti_1 ** 2 @ ((tonic_3 + h_I) + (tonic_3 + h_V34))) *
+                   (t_alberti_1 ** 2 @ ((tonic_3 + h_V6) + (tonic_3 + h_I))) *
+                   (t_alberti_2_a * t_alberti_2_b * t_alberti_cad @ ((tonic_3 + h_V34) + (tonic_3 + h_Ino3) + (tonic_3 + h_V_prime))))
 
 phrase_1 = accompaniment_1  + melody_1
 
-## Theme A
+## Theme B
 ### Melody
 melody_2 = ((t_theme_B_head * t_half_quarter @ h_theme_B_1) *
             (t_theme_B_head_bis * t_half_quarter @ h_theme_B_2) *
@@ -152,23 +181,23 @@ melody_2 = ((t_theme_B_head * t_half_quarter @ h_theme_B_1) *
             (t_coup @ h_I_coup_mel))
 
 ### Accompaniment
-accompaniment_2 = ((t_acc_B_head @ h_Ino5) *
-                   (t_acc_B_tail @ h_viino5) *
-                   (t_acc_B_head @ h_vii) *
-                   (t_acc_B_tail @ h_Ino5) *
-                   (t_acc_B_head @ h_Ino1) *
-                   (t_acc_B_tail_prime @ h_IVno5) *
-                   (t_cad_1 @ h_dom8) *
-                   (t_coup @ h_I_coup_acc) *
+accompaniment_2 = ((t_acc_B_head @ (dominant_4 + h_Ino5.flat())) *
+                   (t_acc_B_tail @ (dominant_4 + h_viino5.flat())) *
+                   (t_acc_B_head @ (dominant_4 + h_vii.flat())) *
+                   (t_acc_B_tail @ (dominant_4 + h_Ino5.flat())) *
+                   (t_acc_B_head @ (dominant_4 + h_Ino1.flat())) *
+                   (t_acc_B_tail_prime @ (dominant_4 + h_IVno5.flat())) *
+                   (t_cad_1 @ (dominant_4 + h_dom8)) *
+                   (t_coup @ (dominant_3 + reversed(h_ton8))) *
                    (t_theme_B2_4 @ h_theme_B2_acc) *
-                   (t_eighth_full @ h_ton) *
-                   (t_dotted_half @ h_V7no35) *
+                   (t_eighth_full @ (dominant_4 + h_ton)) *
+                   (t_dotted_half @ (dominant_3 + h_V7no35.flat())) *
                    (t_coup @ h_I_coup_acc))
 
-phrase_2 = accompaniment_2  + melody_2
+phrase_2 = melody_2 + accompaniment_2
 
 ## Full piece
-piece = phrase_1 @ piano
+piece = (phrase_1 * phrase_2) @ piano
 
 # Paths
 name = Path(__file__).stem
