@@ -13,6 +13,7 @@ G4 = Pitch(67)
 # Keys
 tonic_4 = G4
 tonic_3 = G4 - 12
+tonic_5 = G4 + 12
 
 dominant_5 = tonic_4 + 7
 dominant_4 = tonic_3 + 7
@@ -40,12 +41,16 @@ t_half_quarter = t_half * t_quarter
 t_6_eighths = t_eighth ** 6
 
 t_2_quarter_p = Texture(Rhythm(Hit('0', '1/4'), Hit('1/4', '1/4')))
+t_3_quarter_p = Texture(Rhythm(Hit('0', '1/4'), Hit('1/4', '1/4'), Hit('2/4', '1/4')))
+
+t_quarter_full = Texture(t_quarter)
+t_quarter_full.end = frac(3, 4)
 
 ## Melodic textures
-### Theme A
+### Theme P
 t_theme_A_head = t_dotted_quarter * t_eighth ** 3
 
-### Theme B
+### Theme S
 t_theme_B_head = t_4_12 * t_triplet_eighth ** 5
 t_theme_B_head_bis = t_5_16 * t_sixteenth ** 7
 t_theme_B2_1 = t_quarter * t_sixteenth ** 4 * t_dotted_eighth * t_sixteenth
@@ -63,6 +68,15 @@ t_acc_B_tail_prime.end += frac(2, 4)
 t_cad_1 = Texture(Rhythm(Hit('0', '1/4'), Hit('2/4', '1/4')), Rhythm(Hit('1/4', '1/4')))
 t_eighth_full = Texture(t_eighth)
 t_eighth_full.end = frac(3, 4)
+
+### Development
+t_dev_3 = Texture(
+    Rhythm(Hit('0', '7/32'), Hit('2/8', '1/8'), Hit('4/8', '1/8')),
+    Rhythm(Hit('7/32', '1/32')),
+    Rhythm(Hit('3/8', '1/8')),
+    Rhythm(Hit('5/8', '1/8')),
+)
+t_dev_4 = t_dotted_quarter * t_sixteenth ** 2 * t_quarter
 
 ## Accompaniment textures
 t_alberti_1 = Texture(
@@ -91,6 +105,7 @@ t_alberti_cad = Texture(
 # Harmony
 ## Tonal degrees
 silence = Chord()
+h_silence = Harmony(silence)
 
 tonic = Chord({0})
 supertonic = Chord({2})
@@ -101,7 +116,8 @@ dominant = Chord({7})
 submediant = Chord({9})
 leading_tone = Chord({11})
 
-supertonic_sharp = Chord({3})
+led_mediant = Chord({3})
+led_submediant = Chord({8})
 
 supertonic_ = supertonic + (-12)
 mediant_ = mediant + (-12)
@@ -127,15 +143,18 @@ h_dom8 = Harmony(dominant_, dominant)
 h_ton8 = Harmony(tonic, tonic + 12)
 h_ton = Harmony(tonic)
 h_V7no35 = Harmony(dominant_, subdominant)
+h_V7no3 = Harmony(dominant_, supertonic, subdominant)
+h_I46 = Harmony(dominant_, tonic, mediant)
+h_V = Harmony(dominant_, leading_tone_, supertonic)
 
-## Theme A
+## Theme P
 ### Melody
 h_theme_A_1 = tonic_4 + Harmony(tonic, mediant, tonic, mediant, dominant, dominant, dominant)
 h_theme_A_2 = tonic_4 + Harmony(dominant, mediant + 12, supertonic + 12, tonic + 12, tonic + 12, leading_tone)
-h_theme_A_3 = tonic_4 + Harmony(supertonic + 12, leading_tone, dominant, subdominant, supertonic_sharp, mediant, submediant, dominant, mediant, tonic)
+h_theme_A_3 = tonic_4 + Harmony(supertonic + 12, leading_tone, dominant, subdominant, led_mediant, mediant, submediant, dominant, mediant, tonic)
 h_theme_A_4 = tonic_4 + Harmony(leading_tone_, leading_tone_ | subdominant, tonic | mediant, tonic | mediant, leading_tone_ | supertonic)
 
-## Theme B
+## Theme S
 ### Melody
 h_theme_B_1 = dominant_5 + Harmony(dominant_, submediant_, leading_tone_, tonic, supertonic, mediant, dominant, subdominant)
 h_theme_B_2 = dominant_5 + Harmony(dominant_, submediant_, leading_tone_, tonic, supertonic, mediant, subdominant, dominant, submediant, dominant)
@@ -152,8 +171,16 @@ h_I_coup_mel = dominant_4 + Harmony(tonic, mediant | dominant | (tonic + 12))
 h_I_coup_acc = dominant_3 + Harmony(tonic | mediant, tonic - 12 | tonic)
 h_theme_B2_acc = dominant_3 + Harmony(silence, dominant_, submediant_, leading_tone_, tonic, supertonic, mediant, subdominant, dominant, submediant, leading_tone)
 
+## Development
+### Melody
+h_dev_1 = tonic_4 + Harmony(dominant, led_submediant, submediant, subdominant, supertonic, tonic)
+h_dev_2 = tonic_4 + Harmony(leading_tone_)
+h_dev_3 = tonic_4 + Harmony(tonic, supertonic, leading_tone_, mediant)
+h_dev_tail_1 = tonic_4 + Harmony(dominant, subdominant, mediant, supertonic)
+h_dev_tail_2 = tonic_5 + Harmony(dominant, subdominant, mediant, supertonic, tonic, leading_tone_, submediant_, dominant_, subdominant_, mediant_, supertonic_)
+
 # Structure
-## Theme A
+## Theme P
 ### Melody
 melody_1 = ((t_theme_A_head * t_3_quarters @ h_theme_A_1) *
             (t_theme_A_head * t_half_quarter @ h_theme_A_2) *
@@ -166,9 +193,10 @@ accompaniment_1 = ((t_alberti_1 ** 2 @ ((tonic_3 + h_I) * 2)) *
                    (t_alberti_1 ** 2 @ ((tonic_3 + h_V6) + (tonic_3 + h_I))) *
                    (t_alberti_2_a * t_alberti_2_b * t_alberti_cad @ ((tonic_3 + h_V34) + (tonic_3 + h_Ino3) + (tonic_3 + h_V_prime))))
 
-phrase_1 = accompaniment_1  + melody_1
+theme_p = accompaniment_1 + melody_1
 
-## Theme B
+
+## Theme S
 ### Melody
 melody_2 = ((t_theme_B_head * t_half_quarter @ h_theme_B_1) *
             (t_theme_B_head_bis * t_half_quarter @ h_theme_B_2) *
@@ -194,10 +222,42 @@ accompaniment_2 = ((t_acc_B_head @ (dominant_4 + h_Ino5.flat())) *
                    (t_dotted_half @ (dominant_3 + h_V7no35.flat())) *
                    (t_coup @ h_I_coup_acc))
 
-phrase_2 = melody_2 + accompaniment_2
+theme_s = melody_2 + accompaniment_2
+
+## Development
+### Melody
+mel_dev_head = ((t_6_eighths @ h_dev_1) *
+              (t_3_quarter_p @ h_dev_2) *
+              (t_dev_3 @ h_dev_3))
+mel_dev_tail_1 = t_dev_4 @ h_dev_tail_1
+mel_dev_tail_2 = t_theme_B2_4 @ h_dev_tail_2
+
+### Accompaniment
+acc_dev_head = ((t_dotted_half @ h_silence) *
+                (t_acc_B_head @ (tonic_3 + h_V7no3.flat())) *
+                (t_3_quarter_p @ (tonic_3 + h_I46.flat())))
+acc_dev_tail_1 = t_dotted_half @ (tonic_3 + h_V.flat())
+acc_dev_tail_2 = t_quarter @ (tonic_4 + h_V.flat())
+
+development_head = mel_dev_head + acc_dev_head
+development_tail_1 = mel_dev_tail_1 + acc_dev_tail_1
+development_tail_2 = mel_dev_tail_2 + acc_dev_tail_2
+
+developpement = development_head * development_tail_1 * ((development_head + 12) * development_tail_2)
+
+## Theme S prime
+melody_1_prime = ((t_theme_A_head * t_3_quarters @ h_theme_A_1) *
+                  (t_theme_A_head * t_half_quarter @ h_theme_A_2))
+accompaniment_1_prime = (t_alberti_1 @ (tonic_3 + h_I)) ** 3
+
+
+# ToDo
+
+
+theme_p_prime = accompaniment_1_prime + melody_1_prime
 
 ## Full piece
-piece = (phrase_1 * phrase_2) @ piano
+piece = (theme_p * theme_s * developpement * theme_p_prime) @ piano
 
 # Paths
 name = Path(__file__).stem

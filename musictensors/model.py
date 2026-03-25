@@ -278,6 +278,8 @@ class Chord:
         self.velocity = velocity if velocity is not None else self.default_velocity
 
     def __add__(self, other: int) -> 'Chord':
+        if len(self.pitches) == 0:
+            return Chord(velocity=self.velocity)
         return Chord({p + other for p in self.pitches}, velocity=self.velocity)
 
     def __sub__(self, other: int) -> 'Chord':
@@ -608,11 +610,24 @@ class HarmonicTexture:
         self.harmony = harmony[:min_length]
         self.texture = texture[:min_length]
 
+    @multimethod
     def __add__(self, other: 'HarmonicTexture') -> 'HarmonicTexture':
         return HarmonicTexture(self.harmony + other.harmony, self.texture + other.texture)
 
+    @multimethod
+    def __add__(self, other: int) -> 'HarmonicTexture':
+        return HarmonicTexture(self.harmony + other, self.texture)
+
+    @multimethod
     def __mul__(self, other: 'HarmonicTexture') -> 'HarmonicTexture':
         return HarmonicTexture(self.harmony + other.harmony, self.texture * other.texture)
+
+    @multimethod
+    def __mul__(self, other: frac) -> 'HarmonicTexture':
+        return HarmonicTexture(self.harmony, self.texture * other)
+
+    def __sub__(self, other: int) -> 'HarmonicTexture':
+        return HarmonicTexture(self.harmony - other, self.texture)
 
     def __pow__(self, power: int) -> 'HarmonicTexture':
         return HarmonicTexture(self.harmony * power, self.texture ** power)
