@@ -299,11 +299,11 @@ accompaniment_1_prime = ((t_alberti_1 @ (tonic_3 + h_I)) ** 3 *
                          (t_alberti_3 @ h_theme_P_acc_2) *
                          (t_quarter_full @ (tonic_3 + h_Ino5.flat())))
 
+theme_p_prime = accompaniment_1_prime + melody_1_prime
+
 ## Theme S prime
 theme_s_prime = theme_s + 5
 
-
-theme_p_prime = accompaniment_1_prime + melody_1_prime
 
 ## Full piece
 piece = (theme_p * theme_s * developpement * theme_p_prime * theme_s_prime) @ piano
