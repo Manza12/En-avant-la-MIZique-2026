@@ -44,7 +44,8 @@ def texture_to_latex(T, resolution, resolution_pos=None, x=0.5, add_rhythms=True
 
 
 def texture_to_svg(T, resolution, output_svg, resolution_pos=None, x=0.5, add_rhythms=True,
-                   inkscape_path=r"C:\Program Files\Inkscape\bin\inkscape.exe"):
+                   inkscape_path=r"C:\Program Files\Inkscape\bin\inkscape.exe",
+                   color=(0, 60, 102)):
     # Usamos C:\Tmp como directorio de trabajo para evitar rutas con caracteres especiales
     safe_dir = r"C:\Tmp\texture_latex"
     os.makedirs(safe_dir, exist_ok=True)
@@ -62,7 +63,7 @@ def texture_to_svg(T, resolution, output_svg, resolution_pos=None, x=0.5, add_rh
         "\\usepackage{tikz}\n"
         "\\usepackage{harmony}\n"
         "\\usepackage{xcolor}\n"
-        "\\definecolor{mycolor}{RGB}{0,60,102}\n"
+        "\\definecolor{mycolor}{RGB}{" + ",".join([str(c) for c in color]) + "}\n"
         "\\pagestyle{empty}\n"
         "\\begin{document}\n"
         + tikz_body + "\n"
