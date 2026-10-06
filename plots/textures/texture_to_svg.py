@@ -3,7 +3,7 @@ import subprocess
 import shutil
 
 
-def texture_to_latex(T, resolution, resolution_pos=None, x=0.5, add_rhythms=True):
+def texture_to_latex(T, resolution, resolution_pos=None, x=0.5, add_rhythms=True, stroke_width=0.8, tick_offset=0.25):
     rows = len(T)
     cols = max(len(row) for row in T)
     lines = []
@@ -12,12 +12,18 @@ def texture_to_latex(T, resolution, resolution_pos=None, x=0.5, add_rhythms=True
     lines.append(r"        \begin{tikzpicture}[baseline=(current bounding box.center)]")
     lines.append(r"        % Commands")
     lines.append(f"        \\newcommand\\x{{{x}}}")
-    lines.append(r"        \newcommand{\Cross}{$\mathbin{\tikz [x=3*\x ex,y=3*\x ex,line width=0.5*\x ex] \draw (0,0) -- (1,1) (0,1) -- (1,0);}$}")
+    # Cross: line width ahora es absoluto en pt, no relativo a \x
+    lines.append(
+        f"        \\newcommand{{\\Cross}}{{$\\mathbin{{\\tikz [x=3*\\x ex,y=3*\\x ex,line width={stroke_width}pt] \\draw (0,0) -- (1,1) (0,1) -- (1,0);}}$}}")
     lines.append(r"        \newcommand{\Cdot}{\tikz\draw[mycolor,fill=mycolor] (0,0) circle (0.5*\x ex);}")
     lines.append(r"        % Grid")
-    lines.append(f"        \\draw[step=\\x cm,color=mycolor] (0,0) grid ({cols}*\\x,{rows}*\\x);")
+    # Grid: line width explícito en pt
+    lines.append(
+        f"        \\draw[step=\\x cm,color=mycolor,line width={stroke_width}pt] (0,0) grid ({cols}*\\x,{rows}*\\x);")
     lines.append(f"        \\foreach \\i in {{1, 2, ..., {rows}}}{{")
-    lines.append(f"            \\dxcolorraw[thick] (0,\\i*\\x-\\x) rectangle ({cols}*\\x, \\i*\\x);")
+    # dxcolorraw: reemplazamos thick por line width explícito
+    lines.append(
+        f"            \\dxcolorraw[line width={stroke_width}pt] (0,\\i*\\x-\\x) rectangle ({cols}*\\x, \\i*\\x);")
     lines.append(r"        }")
     lines.append(r"        % Values")
     for row_idx, row in enumerate(T):
@@ -31,13 +37,13 @@ def texture_to_latex(T, resolution, resolution_pos=None, x=0.5, add_rhythms=True
             y_pos = f"{row_num}*\\x - \\x/2"
             lines.append(f"        \\node at ({x_pos},{y_pos}) {{{symbol}}};")
     lines.append(r"        % Ticks")
-    lines.append(f"        \\node at (0*\\x, -\\x/2) {{$0$}};")
+    lines.append(f"        \\node at (0*\\x, -{tick_offset}) {{$0$}};")
     pos = resolution_pos if resolution_pos is not None else cols
-    lines.append(f"        \\node at ({pos}*\\x, -\\x/2) {{$\\{resolution}$}};")
+    lines.append(f"        \\node at ({pos}*\\x, -{tick_offset}) {{$\\{resolution}$}};")
     for row_idx in range(rows):
         row_num = row_idx + 1
         if add_rhythms:
-            lines.append(f"        \\node at (-\\x, {row_num}*\\x - \\x/2) {{$R_{{{row_num}}}$}};")
+            lines.append(f"        \\node at (-{tick_offset}*2, {row_num}*\\x - \\x/2) {{$R_{{{row_num}}}$}};")
     lines.append(r"    \end{tikzpicture}")
     lines.append(r"\end{center}")
     return "\n".join(lines)
@@ -45,7 +51,7 @@ def texture_to_latex(T, resolution, resolution_pos=None, x=0.5, add_rhythms=True
 
 def texture_to_svg(T, resolution, output_svg, resolution_pos=None, x=0.5, add_rhythms=True,
                    inkscape_path=r"C:\Program Files\Inkscape\bin\inkscape.exe",
-                   color=(0, 60, 102)):
+                   color=(0, 60, 102), stroke_width=0.8, tick_offset=0.25):
     # Usamos C:\Tmp como directorio de trabajo para evitar rutas con caracteres especiales
     safe_dir = r"C:\Tmp\texture_latex"
     os.makedirs(safe_dir, exist_ok=True)
@@ -54,7 +60,8 @@ def texture_to_svg(T, resolution, output_svg, resolution_pos=None, x=0.5, add_rh
     pdf_path = os.path.join(safe_dir, "texture.pdf")
     svg_path = os.path.join(safe_dir, "texture.svg")
 
-    tikz_body = texture_to_latex(T, resolution=resolution, resolution_pos=resolution_pos, x=x, add_rhythms=add_rhythms)
+    tikz_body = texture_to_latex(T, resolution=resolution, resolution_pos=resolution_pos, x=x, add_rhythms=add_rhythms,
+                                 stroke_width=stroke_width, tick_offset=tick_offset)
 
     full_tex = (
         "\\documentclass{standalone}\n"

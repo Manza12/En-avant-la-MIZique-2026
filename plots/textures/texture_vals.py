@@ -12,6 +12,6 @@ texture_to_svg(
     resolution="Vier",
     resolution_pos=1,
     output_svg="texture_vals.svg",
-    add_rhythms=False
+    add_rhythms=False,
 )
 
