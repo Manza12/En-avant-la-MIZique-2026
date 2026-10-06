@@ -77,6 +77,9 @@ class Rhythm:
             return False
         return self.hits == other.hits
 
+    def __hash__(self):
+        return hash(tuple(sorted(self.hits, key=lambda h: (h.onset, h.duration))))
+
     def __repr__(self):
         return '{' + f"{', '.join([str(h) for h in self.hits])}" + '}'
 
@@ -169,6 +172,9 @@ class Texture:
 
     def __repr__(self):
         return f"[{', '.join([str(r) for r in self.rhythms])}]"
+
+    def __hash__(self):
+        return hash(tuple(self.rhythms))
 
     def __getitem__(self, key):
         return Texture(self.rhythms[key], start=self.start, end=self.end)
@@ -297,6 +303,9 @@ class Chord:
             return False
         return self.pitches == other.pitches
 
+    def __hash__(self):
+        return hash(tuple(sorted(self.pitches, key=lambda p: p.number)))
+
     def __repr__(self):
         return '{' + f"{', '.join([str(p) for p in self.pitches])}" + '}'
 
@@ -395,6 +404,9 @@ class Harmony:
 
     def __repr__(self):
         return f"[{', '.join([str(c) for c in self.chords])}]"
+
+    def __hash__(self):
+        return hash(tuple(self.chords))
 
     @classmethod
     def from_chord(cls, chord: Chord):
@@ -546,6 +558,9 @@ class Orchestration:
     def __repr__(self):
         return f"[{', '.join([str(g) for g in self.sections])}]"
 
+    def __hash__(self):
+        return hash(tuple(self.sections))
+
 
 # Time-Frequency
 class Note:
@@ -655,6 +670,9 @@ class HarmonicTexture:
             return False
         return self.harmony == other.harmony and self.texture == other.texture
 
+    def __hash__(self):
+        return hash((self.harmony, self.texture))
+
     def notes(self, instrument_name: str = 'Acoustic Grand Piano'):
         result = set()
 
@@ -705,6 +723,9 @@ class HarmonicOrchestration:
             return False
         return self.harmony == other.harmony and self.orchestration == other.orchestration
 
+    def __hash__(self):
+        return hash((self.harmony, self.orchestration))
+
 
 class OrchestredTexture:
     @multimethod
@@ -744,6 +765,9 @@ class OrchestredTexture:
 
     def __matmul__(self, other: Harmony) -> 'ScoreTensor':
         return ScoreTensor(other, self.texture, self.orchestration)
+
+    def __hash__(self):
+        return hash((self.texture, self.orchestration))
 
 
 class ScoreTensor:
@@ -811,6 +835,9 @@ class ScoreTensor:
         same_harmony = self.harmony == other.harmony
         same_orchestration = self.orchestration == other.orchestration
         return same_texture and same_harmony and same_orchestration
+
+    def __hash__(self):
+        return hash((self.harmony, self.texture, self.orchestration))
 
     @property
     def start(self):

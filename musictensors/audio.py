@@ -3,11 +3,11 @@ from pathlib import Path
 
 
 sound_fonts_paths = {
-    'FluidR3_GM2-2': Path("../../../SoundFonts/FluidR3_GM2-2.sf2"),
-    'GeneralUser':   Path("../../../SoundFonts/GeneralUser-GS/GeneralUser-GS.sf2"),
-    'Musyng Kite':   Path("../../../SoundFonts/Musyng_Kite/Musyng_Kite.sf2"),
-    'Arachno':       Path("../../../SoundFonts/Arachno/Arachno-v1.0.sf2"),
-    'Timbres of Heaven': Path("../../../SoundFonts/Timbres_of_Heaven/Timbres of Heaven (XGM) 4.00(G).sf2"),
+    'FluidR3_GM2-2': Path("soundfonts/FluidR3_GM2-2.sf2"),
+    'GeneralUser':   Path("soundfonts/GeneralUser-GS/GeneralUser-GS.sf2"),
+    'Musyng Kite':   Path("soundfonts/Musyng_Kite/Musyng_Kite.sf2"),
+    'Arachno':       Path("soundfonts/Arachno/Arachno-v1.0.sf2"),
+    'Timbres of Heaven': Path("soundfonts/Timbres_of_Heaven/Timbres of Heaven (XGM) 4.00(G).sf2"),
 }
 sf2_path = sound_fonts_paths['Timbres of Heaven']
 

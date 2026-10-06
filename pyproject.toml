@@ -1,0 +1,20 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "musictensors"
+version = "0.1.0"
+description = "Tensor-based music composition, visualization, and MIDI export."
+requires-python = ">=3.9"
+dependencies = [
+    "matplotlib",
+    "multimethod",
+    "pretty_midi",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["musictensors"]
+
+[tool.hatch.build.targets.sdist]
+include = ["/musictensors", "/pyproject.toml"]
