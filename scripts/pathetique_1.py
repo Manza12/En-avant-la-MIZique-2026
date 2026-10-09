@@ -11,6 +11,7 @@ from musictensors import frac
 
 # Time
 ## Note values
+t_dotted_whole = Texture(Rhythm(Hit('0', '3/2')))
 t_dotted_half = Texture(Rhythm(Hit('0', '3/4')))
 t_half = Texture(Rhythm(Hit('0', '1/2')))
 t_quarter = Texture(Rhythm(Hit('0', '1/4')))
@@ -18,8 +19,8 @@ t_eighth = Texture(Rhythm(Hit('0', '1/8')))
 
 ## Textures
 t_pedal = Texture(
-    Rhythm(Hit('0/8', '1/8'), Hit('2/8', '1/8'), Hit('4/8', '1/8'), Hit('6/8', '1/8')),
-    Rhythm(Hit('1/8', '1/8'), Hit('3/8', '1/8'), Hit('5/8', '1/8'), Hit('7/8', '1/8')),
+    Rhythm(Hit('0/8', '1/8'), Hit('2/8', '1/8')),
+    Rhythm(Hit('1/8', '1/8'), Hit('3/8', '1/8')),
 )
 
 t_melody_1_head_1 = t_dotted_half * t_quarter
@@ -28,78 +29,124 @@ t_melody_1_tail = t_quarter ** 4
 
 # Frequency
 ## Pitches and degrees
-C4 = Pitch(60)
-octave_4 = C4
+tonic = Pitch(60)
 
-tonic = Chord({0})
-supertonic = Chord({2})
-mediant_minor = Chord({3})
-mediant_major = Chord({4})
-subdominant = Chord({5})
-tritone = Chord({6})
-dominant = Chord({7})
-submediant_minor = Chord({8})
-submediant_major = Chord({9})
-subtonic = Chord({10})
-leading_tone = Chord({11})
-
-supertonic_1 = supertonic - 12
-mediant_minor_1 = mediant_minor - 12
-mediant_major_1 = mediant_major - 12
-subdominant_1 = subdominant - 12
-tritone_1 = tritone - 12
-dominant_1 = dominant - 12
-submediant_minor_1 = submediant_minor - 12
-submediant_major_1 = submediant_major - 12
-subtonic_1 = subtonic - 12
-leading_tone_1 = leading_tone - 12
+ton = Chord({0})
+sup = Chord({2})
+mdm = Chord({3})
+mdM = Chord({4})
+sub = Chord({5})
+tri = Chord({6})
+dom = Chord({7})
+smm = Chord({8})
+smM = Chord({9})
+sbt = Chord({10})
+ldt = Chord({11})
 
 ## Harmonies
-h_ton_1 = Harmony.from_chord(tonic)
-h_ton_2 = Harmony.from_chord(tonic | tonic + 12)
+### Length 1
+#### Density 1
+h_Ton = Harmony.from_chord(ton)        # ({0})
+h_Sup = Harmony.from_chord(sup)        # ({2})
+h_Min = Harmony.from_chord(mdm)        # ({3})
+h_Sub = Harmony.from_chord(sub)        # ({5})
+h_Tri = Harmony.from_chord(tri)        # ({6})
+h_Dom = Harmony.from_chord(dom)        # ({7})
+h_Smm = Harmony.from_chord(smm)        # ({8})
+h_SmM = Harmony.from_chord(smM)        # ({9})
 
-h_Min_6M = Harmony(mediant_minor_1 | tonic)
-h_Maj_6m = Harmony(mediant_major_1 | tonic)
-h_Sub_4A = Harmony(subtonic_1 | mediant_major)
-h_Smm_6M = Harmony(submediant_minor_1 | subdominant)
-h_Maj_3m = Harmony(mediant_major | dominant)
-h_Sub_3m = Harmony(subdominant | submediant_minor)
-h_Sup_6M = Harmony(supertonic | leading_tone)
+#### Density 2
+h_Min_6M = Harmony(mdm | (ton + 12))    # ({3, 12})
+h_Maj_6m = Harmony(mdM | (ton + 12))    # ({4, 12})
+h_Sub_4A = Harmony(sbt | (mdM + 12))    # ({10, 16})
+h_Smm_6M = Harmony(smm | (sub + 12))    # ({8, 17})
+h_Maj_3m = Harmony(mdM | dom)           # ({4, 7})
+h_Sub_3m = Harmony(sub | smm)           # ({5, 8})   
+h_Sup_6M = Harmony(sup | ldt)           # ({2, 11})
+
+#### Density 3
+h_viio36 = Harmony(sup | sub | ldt)                 # ({2, 5, 11})
+h_i46 = Harmony(dom | (ton + 12) | (mdm + 12))      # ({7, 12, 15})
+h_iio36 = Harmony(sub | smm | (sup + 12))           # ({5, 8, 14})
+
+#### Density 4
+h_i358 = Harmony(ton | mdm | dom | (ton + 12))          # ({0, 3, 7, 12})
+h_V378 = Harmony(dom | ldt | (sub + 12) | (dom + 12))   # ({7, 11, 17, 19})
+
+### Length 2
+h_Ton_2 = Harmony.from_chord(ton | ton + 12)                        # ({0}, {12})
+h_Sup_2 = Harmony.from_chord(sup | sup + 12)              # ({2}, {14})
+h_Min_2 = Harmony.from_chord(mdm | mdm + 12)        # ({3}, {15})
+h_Sub_2 = Harmony.from_chord(sub | sub + 12)            # ({5}, {17})
+h_Tri_2 = Harmony.from_chord(tri | tri + 12)                    # ({6}, {18})
+h_Dom_2 = Harmony.from_chord(dom | dom + 12)                  # ({7}, {19})
+h_Smm_2 = Harmony.from_chord(smm | smm + 12)  # ({8}, {20})
 
 #############
 # Structure #
 #############
 
-# Exposition
+## Exposition
 ### Theme P
 #### Phrase 1
-##### Measure 1
-m1_bass = t_pedal @ (h_ton_2 - 12 * 2)
-m1_melody = t_melody_1_head_1 @ (h_ton_1 + h_Sub_4A)
-m1 = m1_bass + m1_melody
+##### Measure 11-12
+m11_bass = (t_pedal * 2) @ (h_Ton_2 - 12 * 2)
+m11_12_bass = m11_bass ** 2
 
-##### Measure 2
-m2_bass = m1_bass
-m2_melody = t_melody_1_tail @ (h_Smm_6M + h_Maj_3m + h_Sub_3m + h_Sup_6M)
-m2 = m2_bass + m2_melody
+m11_melody = t_melody_1_head_1 @ (h_Ton + (h_Sub_4A - 12))
+m12_melody = t_melody_1_tail @ ((h_Smm_6M - 12) + h_Maj_3m + h_Sub_3m + h_Sup_6M)
+m11_12_melody = m11_melody * m12_melody
 
-##### Measure 3
-m3_bass = m1_bass
-m3_melody = t_melody_1_head_2 @ ((h_Min_6M + h_Maj_6m + h_Sub_4A) + 12)
-m3 = m3_bass + m3_melody
+m11_12 = m11_12_bass + m11_12_melody
 
-##### Measure 4
-m4_bass = m1_bass
-m4_melody = m2_melody + 12
-m4 = m4_bass + m4_melody
+##### Measure 13
+m13_14_bass = m11_bass ** 2
 
-phrase_1 = m1 * m2 * m3 * m4
+m13_melody = t_melody_1_head_2 @ (h_Min_6M + h_Maj_6m + h_Sub_4A)
+m14_melody = m12_melody + 12
+m13_14_melody = m13_melody * m14_melody
 
-theme_p = octave_4 + phrase_1
+m13_14 = m13_14_bass + m13_14_melody
+
+phrase_1 = m11_12 * m13_14
+
+#### Phrase 2
+###### Bass
+m15_1_bass = t_pedal @ (h_Ton_2 - 12 * 2)
+m15_2_bass = t_pedal @ (h_Sup_2 - 12 * 2)
+m16_1_bass = t_pedal @ (h_Min_2 - 12 * 2)
+m16_2_bass = t_pedal @ (h_Sub_2 - 12 * 2)
+m17_1_bass = t_pedal @ (h_Dom_2 - 12 * 2)
+m17_2_bass = t_pedal @ (h_Smm_2 - 12 * 2)
+m18_1_bass = t_pedal @ (h_Tri_2 - 12 * 2)
+m18_2_bass = t_pedal @ (h_Dom_2 - 12 * 2)
+
+###### Melody
+m15_1_melody = t_half @ (h_i358 + 12)
+m15_2_melody = t_half @ h_V378
+m16_1_melody = t_half @ h_i46
+m16_2_melody = t_half @ h_iio36
+
+m17_18_1_melody_1 = t_dotted_whole @ h_Min_6M
+m17_18_1_melody_2 = (t_half ** 3) @ (h_Dom + h_Tri + h_SmM)
+m17_18_1_melody = m17_18_1_melody_1 + m17_18_1_melody_2
+
+m18_2_melody = t_half @ h_viio36
+
+m15_1 = m15_1_bass + m15_1_melody
+m15_2 = m15_2_bass + m15_2_melody
+m16_1 = m16_1_bass + m16_1_melody
+m16_2 = m16_2_bass + m16_2_melody
+m17_18_1 = (m17_1_bass * m17_2_bass * m18_1_bass) + m17_18_1_melody
+m18_2 = m18_2_bass + m18_2_melody
+
+phrase_2 = m15_1 * m15_2 * m16_1 * m16_2 * m17_18_1 * m18_2
+
+theme_p = phrase_1 * phrase_2
 
 exposition = theme_p
 
-piece = exposition
+piece = tonic + exposition
 
 # Paths
 name = "pathetique_1"
@@ -107,7 +154,8 @@ midi_path = Path(f'./midi/{name}.mid')
 audio_path = Path(f'./audio/{name}.wav')
 
 # Write MIDI
-midi = piece.to_midi(bpm=200)
+fragment = piece
+midi = fragment.to_midi(bpm=200)
 midi.write(midi_path)
 
 # Render MIDI to audio
@@ -118,7 +166,7 @@ render_midi_to_audio(
 )
 
 # Plot
-plot_notes(piece, figsize=(12, 6), x_tick_start=0, x_tick_step=frac(1, 2))
+plot_notes(fragment, figsize=(12, 6), x_tick_start=0, x_tick_step=frac(1, 2))
 plt.tight_layout()
 plt.savefig(f'./plots/{name}.svg', format='svg')
 plt.show()

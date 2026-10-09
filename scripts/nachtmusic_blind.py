@@ -50,9 +50,9 @@ t_3_tail = Texture(
     Rhythm(Hit('5/8', '1/8')),
 )
 
-t_3_a = Texture(Rhythm(Hit('0', '1'))) * 5
-t_3_b = Texture(Rhythm(Hit('0', '1'))) * 7
-t_3_c = Texture(Rhythm(Hit('0', '1'))) * 6
+t_3_a = Texture(*[Rhythm(Hit('0', '1'))] * 5)
+t_3_b = Texture(*[Rhythm(Hit('0', '1'))] * 7)
+t_3_c = Texture(*[Rhythm(Hit('0', '1'))] * 6)
 
 t_4_a = Texture(
     Rhythm(Hit('0', '1/2'))
@@ -61,8 +61,8 @@ t_4_b = Texture(
     Rhythm(Hit('0', '1/2'))
 )
 t_4_c = Texture(
-    Rhythm(Hit('0', '1/2'))
-) * 4
+    *[Rhythm(Hit('0', '1/2'))] * 4
+)
 
 # Harmony
 tonic = Chord({0})
@@ -171,12 +171,12 @@ end = t_quarter ** 7 @ (h_1 + h_2 + h_3 + h_4 + h_5 + h_6 + h_7) @ bass
 piece = ph_1 * ph_2 * end
 
 # Only harmony
-t_half_2 = Texture(Rhythm(Hit('0', '1/2'))) * 2
-t_half_1 = Texture(Rhythm(Hit('0', '1/2'))) * 1
-t_half_4 = Texture(Rhythm(Hit('0', '1/2'))) * 4
-t_whole_5 = Texture(Rhythm(Hit('0', '1/1'))) * 5
-t_whole_6 = Texture(Rhythm(Hit('0', '1/1'))) * 6
-t_whole_7 = Texture(Rhythm(Hit('0', '1/1'))) * 7
+t_half_2 = Texture(*[Rhythm(Hit('0', '1/2'))] * 2)
+t_half_1 = Texture(*[Rhythm(Hit('0', '1/2'))] * 1)
+t_half_4 = Texture(*[Rhythm(Hit('0', '1/2'))] * 4)
+t_whole_5 = Texture(*[Rhythm(Hit('0', '1/1'))] * 5)
+t_whole_6 = Texture(*[Rhythm(Hit('0', '1/1'))] * 6)
+t_whole_7 = Texture(*[Rhythm(Hit('0', '1/1'))] * 7)
 
 t_1 = t_half_2
 t_2 = t_whole_5
@@ -263,11 +263,11 @@ piece_harmony = ph_1 * ph_2
 
 # Paths
 name = Path(__file__).stem
-midi_path = Path(f'../midi/{name}.mid')
-audio_path = Path(f'../audio/{name}.wav')
+midi_path = Path(f'midi/{name}.mid')
+audio_path = Path(f'audio/{name}.wav')
 
-midi_path_harmony = Path(f'../midi/{name}-harmony.mid')
-audio_path_harmony = Path(f'../audio/{name}-harmony.wav')
+midi_path_harmony = Path(f'midi/{name}-harmony.mid')
+audio_path_harmony = Path(f'audio/{name}-harmony.wav')
 
 # Write MIDI
 midi = piece.to_midi(bpm=80*2)

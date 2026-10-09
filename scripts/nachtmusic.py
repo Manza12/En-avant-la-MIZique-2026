@@ -183,12 +183,12 @@ render_midi_to_audio(
 
 
 # Only harmony
-t_half_2 = Texture(Rhythm(Hit('0', '1/2'))) * 2
-t_half_1 = Texture(Rhythm(Hit('0', '1/2'))) * 1
-t_half_4 = Texture(Rhythm(Hit('0', '1/2'))) * 4
-t_whole_5 = Texture(Rhythm(Hit('0', '1/1'))) * 5
-t_whole_6 = Texture(Rhythm(Hit('0', '1/1'))) * 6
-t_whole_7 = Texture(Rhythm(Hit('0', '1/1'))) * 7
+t_half_2 = Texture(*[Rhythm(Hit('0', '1/2'))] * 2)
+t_half_1 = Texture(*[Rhythm(Hit('0', '1/2'))] * 1)
+t_half_4 = Texture(*[Rhythm(Hit('0', '1/2'))] * 4)
+t_whole_5 = Texture(*[Rhythm(Hit('0', '1/1'))] * 5)
+t_whole_6 = Texture(*[Rhythm(Hit('0', '1/1'))] * 6)
+t_whole_7 = Texture(*[Rhythm(Hit('0', '1/1'))] * 7)
 
 t_1 = t_half_2
 t_2 = t_whole_5

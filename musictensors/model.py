@@ -66,6 +66,9 @@ class Rhythm:
     def __init__(self, *hits: Tuple[frac, frac]):
         self.hits = {Hit(h) for h in hits}
 
+    def __or__(self, other: 'Rhythm') -> 'Rhythm':
+        return Rhythm(self.hits | other.hits)
+
     def __add__(self, shift: frac) -> 'Rhythm':
         return Rhythm({shift + Hit(hit.onset, hit.duration) for hit in self.hits})
 
@@ -131,9 +134,9 @@ class Texture:
                        end=max(self.end, other.end))
 
     @multimethod
-    def __add__(self, other: frac) -> 'Texture':
-        return Texture([r + other for r in self.rhythms],
-                       start=self.start + other, end=self.end + other)
+    def __add__(self, ratio: frac) -> 'Texture':
+        return Texture([r + ratio for r in self.rhythms],
+                       start=self.start + ratio, end=self.end + ratio)
 
     @multimethod
     def __mul__(self, other: 'Texture') -> 'Texture':
@@ -148,17 +151,21 @@ class Texture:
                        end=self.end * ratio)
 
     @multimethod
-    def __mul__(self, other: int) -> 'Texture':
-        assert isinstance(other, int) and other > 0, "The other must be a positive integer."
-        result = self
-        for _ in range(other - 1):
-            result = result + self
+    def __mul__(self, n: int) -> 'Texture':
+        assert isinstance(n, int) and n > 0, "The multiplier must be a positive integer."
+        rhythms = []
+        for r in self.rhythms:
+            r_new = Rhythm()
+            for i in range(n):
+                r_new |= r + i * self.duration
+            rhythms.append(r_new)
+        result = Texture(rhythms, start=self.start, end=self.start + self.duration * n)
         return result
 
-    def __pow__(self, other: int) -> 'Texture':
-        assert isinstance(other, int) and other > 0, "The exponent must be a positive integer."
+    def __pow__(self, n: int) -> 'Texture':
+        assert isinstance(n, int) and n > 0, "The exponent must be a positive integer."
         result = self
-        for _ in range(other - 1):
+        for _ in range(n - 1):
             result = result * self
         return result
 
