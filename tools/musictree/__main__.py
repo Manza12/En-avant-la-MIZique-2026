@@ -50,9 +50,11 @@ def cmd_tree(args: argparse.Namespace) -> None:
 
 def cmd_structure(args: argparse.Namespace) -> None:
     from .graph import print_structure
+    from .interpret import build_all
     doc = json.loads(Path(args.json_file).read_text(encoding="utf-8"))
     root = args.root or doc.get("root")
-    print_structure(doc, root=root, max_depth=args.max_depth)
+    ns = build_all(doc, project_root=args.project_root)
+    print_structure(doc, root=root, max_depth=args.max_depth, ns=ns)
 
 
 def cmd_verify(args: argparse.Namespace) -> None:
@@ -106,6 +108,8 @@ def main() -> None:
     p_struct = sub.add_parser("structure",
                               help="Print basic definitions + HarmonicTexture tree")
     p_struct.add_argument("json_file", help="JSON document path")
+    p_struct.add_argument("--project-root", default=".",
+                          help="Project root for resolving imports (default: .)")
     p_struct.add_argument("--root", default=None,
                           help="Root variable to expand")
     p_struct.add_argument("--max-depth", type=int, default=40,

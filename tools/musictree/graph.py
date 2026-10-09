@@ -46,9 +46,24 @@ def _summarise_expr(expr: dict, max_len: int = 48) -> str:
     if "op" in expr:
         op = expr["op"]
         if op == "neg":
-            return f"-{_summarise_expr(expr['args'][0], max_len)}"
-        left = _summarise_expr(expr["args"][0], max_len)
-        right = _summarise_expr(expr["args"][1], max_len)
+            inner = _summarise_expr(expr["args"][0], max_len)
+            if "op" in expr["args"][0]:
+                inner = f"({inner})"
+            return f"-{inner}"
+        left_expr = expr["args"][0]
+        right_expr = expr["args"][1]
+        left = _summarise_expr(left_expr, max_len)
+        right = _summarise_expr(right_expr, max_len)
+        # Parenthesise operands that are themselves binary ops with lower
+        # or equal precedence, to reproduce the source faithfully.
+        _PREC = {"|": 0, "+": 1, "-": 1, "*": 2, "@": 3, "**": 4}
+        op_prec = _PREC.get(op, 0)
+        if "op" in left_expr and left_expr["op"] != "neg":
+            if _PREC.get(left_expr["op"], 0) < op_prec:
+                left = f"({left})"
+        if "op" in right_expr and right_expr["op"] != "neg":
+            if _PREC.get(right_expr["op"], 0) <= op_prec:
+                right = f"({right})"
         s = f"{left} {op} {right}"
         if len(s) > max_len:
             s = s[:max_len - 1] + "\u2026"
@@ -341,8 +356,13 @@ def print_structure(
     root: Optional[str] = None,
     max_depth: int = 40,
     file: Any = None,
+    ns: Optional[Dict[str, Any]] = None,
 ) -> None:
-    """Print basic definitions grouped by type, then the HT construction tree."""
+    """Print basic definitions grouped by type, then the HT construction tree.
+
+    If *ns* is provided (a namespace with built objects), each basic
+    definition shows its ``repr()`` instead of the AST expression summary.
+    """
     if file is None:
         file = sys.stdout
 
@@ -372,8 +392,11 @@ def print_structure(
     for typ in ordered_types:
         print(f"  {typ}:", file=file)
         for name in basic_by_type[typ]:
-            summary = _summarise_expr(by_name[name]["expr"], 60)
-            print(f"    {name} = {summary}", file=file)
+            if ns is not None and name in ns:
+                val = repr(ns[name])
+            else:
+                val = _summarise_expr(by_name[name]["expr"], 60)
+            print(f"    {name} = {val}", file=file)
     print(file=file)
 
     # ── Structure tree ──
