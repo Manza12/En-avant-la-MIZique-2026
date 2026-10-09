@@ -48,6 +48,13 @@ def cmd_tree(args: argparse.Namespace) -> None:
         print_tree(doc, root=root, max_depth=args.max_depth)
 
 
+def cmd_structure(args: argparse.Namespace) -> None:
+    from .graph import print_structure
+    doc = json.loads(Path(args.json_file).read_text(encoding="utf-8"))
+    root = args.root or doc.get("root")
+    print_structure(doc, root=root, max_depth=args.max_depth)
+
+
 def cmd_verify(args: argparse.Namespace) -> None:
     from .verify import verify
     ok = verify(args.script, args.json_file, project_root=args.project_root)
@@ -95,6 +102,15 @@ def main() -> None:
     p_tree.add_argument("--max-depth", type=int, default=20,
                         help="Maximum recursion depth (default: 20)")
 
+    # -- structure -----------------------------------------------------------
+    p_struct = sub.add_parser("structure",
+                              help="Print basic definitions + HarmonicTexture tree")
+    p_struct.add_argument("json_file", help="JSON document path")
+    p_struct.add_argument("--root", default=None,
+                          help="Root variable to expand")
+    p_struct.add_argument("--max-depth", type=int, default=40,
+                          help="Maximum recursion depth (default: 40)")
+
     # -- verify --------------------------------------------------------------
     p_verify = sub.add_parser("verify", help="Verify JSON round-trip")
     p_verify.add_argument("script", help="Original Python script")
@@ -107,6 +123,7 @@ def main() -> None:
         "export": cmd_export,
         "graph": cmd_graph,
         "tree": cmd_tree,
+        "structure": cmd_structure,
         "verify": cmd_verify,
     }[args.command](args)
 

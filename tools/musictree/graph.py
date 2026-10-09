@@ -329,6 +329,97 @@ def print_tree(
 
 
 # ---------------------------------------------------------------------------
+# Structure view (basic defs + HarmonicTexture tree)
+# ---------------------------------------------------------------------------
+
+# Types considered "structural" (the tree nodes).  Everything else is "basic".
+_STRUCTURAL_TYPES = {"HarmonicTexture", "ScoreTensor"}
+
+
+def print_structure(
+    doc: dict,
+    root: Optional[str] = None,
+    max_depth: int = 40,
+    file: Any = None,
+) -> None:
+    """Print basic definitions grouped by type, then the HT construction tree."""
+    if file is None:
+        file = sys.stdout
+
+    by_name = {d["name"]: d for d in doc["definitions"]}
+    defined = set(by_name)
+
+    if root is None:
+        root = doc.get("root", doc["definitions"][-1]["name"])
+
+    # Partition definitions
+    structural: Set[str] = set()
+    basic_by_type: Dict[str, List[str]] = {}
+    for defn in doc["definitions"]:
+        typ = defn.get("type", "")
+        if typ in _STRUCTURAL_TYPES:
+            structural.add(defn["name"])
+        elif typ:
+            basic_by_type.setdefault(typ, []).append(defn["name"])
+
+    # ── Basic definitions ──
+    type_order = ["Pitch", "Hit", "Rhythm", "Texture", "Chord", "Harmony",
+                  "Instrument", "Section", "Orchestration"]
+    ordered_types = [t for t in type_order if t in basic_by_type]
+    ordered_types += sorted(set(basic_by_type) - set(type_order))
+
+    print("── Definitions ──", file=file)
+    for typ in ordered_types:
+        print(f"  {typ}:", file=file)
+        for name in basic_by_type[typ]:
+            summary = _summarise_expr(by_name[name]["expr"], 60)
+            print(f"    {name} = {summary}", file=file)
+    print(file=file)
+
+    # ── Structure tree ──
+    print(f"── Structure ({root}) ──", file=file)
+    seen: Set[str] = set()
+
+    def _ht_children(name: str) -> List[str]:
+        """Direct HarmonicTexture dependencies (the tree children)."""
+        return sorted(_deps_of(by_name[name], defined) & structural)
+
+    def _print_node(name: str, prefix: str, connector: str, depth: int) -> None:
+        defn = by_name[name]
+        summary = _summarise_expr(defn["expr"], 60)
+        print(f"{prefix}{connector}{name} = {summary}", file=file)
+
+        if name in seen:
+            child_pf = prefix + ("\u2502   " if connector == "\u251c\u2500\u2500 " else "    ")
+            print(f"{child_pf}\u2191 (see above)", file=file)
+            return
+        seen.add(name)
+
+        if depth >= max_depth:
+            return
+
+        children = _ht_children(name)
+        child_pf = prefix + ("\u2502   " if connector == "\u251c\u2500\u2500 " else "    ")
+        for i, child in enumerate(children):
+            is_last = (i == len(children) - 1)
+            _print_node(child, child_pf,
+                        "\u2514\u2500\u2500 " if is_last else "\u251c\u2500\u2500 ",
+                        depth + 1)
+
+    # Root line (no connector)
+    defn = by_name[root]
+    summary = _summarise_expr(defn["expr"], 60)
+    print(f"{root} = {summary}", file=file)
+    seen.add(root)
+    children = _ht_children(root)
+    for i, child in enumerate(children):
+        is_last = (i == len(children) - 1)
+        _print_node(child, "",
+                    "\u2514\u2500\u2500 " if is_last else "\u251c\u2500\u2500 ",
+                    1)
+
+
+# ---------------------------------------------------------------------------
 # DOT tree (expanded tree layout, no dependency edges)
 # ---------------------------------------------------------------------------
 
