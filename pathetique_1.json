@@ -1,0 +1,2788 @@
+{
+  "format_version": 1,
+  "source": "pathetique_1_ast.py",
+  "imports": [
+    {
+      "from": "musictensors.model",
+      "names": [
+        "Hit",
+        "Harmony",
+        "Chord",
+        "Rhythm",
+        "Texture",
+        "Pitch"
+      ]
+    }
+  ],
+  "definitions": [
+    {
+      "name": "t_dotted_whole",
+      "line": 9,
+      "expr": {
+        "call": "Texture",
+        "args": [
+          {
+            "call": "Rhythm",
+            "args": [
+              {
+                "call": "Hit",
+                "args": [
+                  {
+                    "lit": "0"
+                  },
+                  {
+                    "lit": "3/2"
+                  }
+                ],
+                "kwargs": {},
+                "type": "Hit"
+              }
+            ],
+            "kwargs": {},
+            "type": "Rhythm"
+          }
+        ],
+        "kwargs": {},
+        "type": "Texture"
+      },
+      "type": "Texture"
+    },
+    {
+      "name": "t_dotted_half",
+      "line": 10,
+      "expr": {
+        "call": "Texture",
+        "args": [
+          {
+            "call": "Rhythm",
+            "args": [
+              {
+                "call": "Hit",
+                "args": [
+                  {
+                    "lit": "0"
+                  },
+                  {
+                    "lit": "3/4"
+                  }
+                ],
+                "kwargs": {},
+                "type": "Hit"
+              }
+            ],
+            "kwargs": {},
+            "type": "Rhythm"
+          }
+        ],
+        "kwargs": {},
+        "type": "Texture"
+      },
+      "type": "Texture"
+    },
+    {
+      "name": "t_half",
+      "line": 11,
+      "expr": {
+        "call": "Texture",
+        "args": [
+          {
+            "call": "Rhythm",
+            "args": [
+              {
+                "call": "Hit",
+                "args": [
+                  {
+                    "lit": "0"
+                  },
+                  {
+                    "lit": "1/2"
+                  }
+                ],
+                "kwargs": {},
+                "type": "Hit"
+              }
+            ],
+            "kwargs": {},
+            "type": "Rhythm"
+          }
+        ],
+        "kwargs": {},
+        "type": "Texture"
+      },
+      "type": "Texture"
+    },
+    {
+      "name": "t_quarter",
+      "line": 12,
+      "expr": {
+        "call": "Texture",
+        "args": [
+          {
+            "call": "Rhythm",
+            "args": [
+              {
+                "call": "Hit",
+                "args": [
+                  {
+                    "lit": "0"
+                  },
+                  {
+                    "lit": "1/4"
+                  }
+                ],
+                "kwargs": {},
+                "type": "Hit"
+              }
+            ],
+            "kwargs": {},
+            "type": "Rhythm"
+          }
+        ],
+        "kwargs": {},
+        "type": "Texture"
+      },
+      "type": "Texture"
+    },
+    {
+      "name": "t_eighth",
+      "line": 13,
+      "expr": {
+        "call": "Texture",
+        "args": [
+          {
+            "call": "Rhythm",
+            "args": [
+              {
+                "call": "Hit",
+                "args": [
+                  {
+                    "lit": "0"
+                  },
+                  {
+                    "lit": "1/8"
+                  }
+                ],
+                "kwargs": {},
+                "type": "Hit"
+              }
+            ],
+            "kwargs": {},
+            "type": "Rhythm"
+          }
+        ],
+        "kwargs": {},
+        "type": "Texture"
+      },
+      "type": "Texture"
+    },
+    {
+      "name": "t_pedal",
+      "line": 16,
+      "expr": {
+        "call": "Texture",
+        "args": [
+          {
+            "call": "Rhythm",
+            "args": [
+              {
+                "call": "Hit",
+                "args": [
+                  {
+                    "lit": "0/8"
+                  },
+                  {
+                    "lit": "1/8"
+                  }
+                ],
+                "kwargs": {},
+                "type": "Hit"
+              },
+              {
+                "call": "Hit",
+                "args": [
+                  {
+                    "lit": "2/8"
+                  },
+                  {
+                    "lit": "1/8"
+                  }
+                ],
+                "kwargs": {},
+                "type": "Hit"
+              }
+            ],
+            "kwargs": {},
+            "type": "Rhythm"
+          },
+          {
+            "call": "Rhythm",
+            "args": [
+              {
+                "call": "Hit",
+                "args": [
+                  {
+                    "lit": "1/8"
+                  },
+                  {
+                    "lit": "1/8"
+                  }
+                ],
+                "kwargs": {},
+                "type": "Hit"
+              },
+              {
+                "call": "Hit",
+                "args": [
+                  {
+                    "lit": "3/8"
+                  },
+                  {
+                    "lit": "1/8"
+                  }
+                ],
+                "kwargs": {},
+                "type": "Hit"
+              }
+            ],
+            "kwargs": {},
+            "type": "Rhythm"
+          }
+        ],
+        "kwargs": {},
+        "type": "Texture"
+      },
+      "type": "Texture"
+    },
+    {
+      "name": "t_melody_1_head_1",
+      "line": 21,
+      "expr": {
+        "op": "*",
+        "args": [
+          {
+            "ref": "t_dotted_half"
+          },
+          {
+            "ref": "t_quarter"
+          }
+        ],
+        "sig": [
+          "Texture",
+          "Texture"
+        ],
+        "type": "Texture"
+      },
+      "type": "Texture"
+    },
+    {
+      "name": "t_melody_1_head_2",
+      "line": 22,
+      "expr": {
+        "op": "*",
+        "args": [
+          {
+            "op": "*",
+            "args": [
+              {
+                "ref": "t_quarter"
+              },
+              {
+                "ref": "t_half"
+              }
+            ],
+            "sig": [
+              "Texture",
+              "Texture"
+            ],
+            "type": "Texture"
+          },
+          {
+            "ref": "t_quarter"
+          }
+        ],
+        "sig": [
+          "Texture",
+          "Texture"
+        ],
+        "type": "Texture"
+      },
+      "type": "Texture"
+    },
+    {
+      "name": "t_melody_1_tail",
+      "line": 23,
+      "expr": {
+        "op": "**",
+        "args": [
+          {
+            "ref": "t_quarter"
+          },
+          {
+            "lit": 4
+          }
+        ],
+        "sig": [
+          "Texture",
+          "int"
+        ],
+        "type": "Texture"
+      },
+      "type": "Texture"
+    },
+    {
+      "name": "tonic",
+      "line": 27,
+      "expr": {
+        "call": "Pitch",
+        "args": [
+          {
+            "lit": 60
+          }
+        ],
+        "kwargs": {},
+        "type": "Pitch"
+      },
+      "type": "Pitch"
+    },
+    {
+      "name": "ton",
+      "line": 29,
+      "expr": {
+        "call": "Chord",
+        "args": [
+          {
+            "set": [
+              {
+                "lit": 0
+              }
+            ]
+          }
+        ],
+        "kwargs": {},
+        "type": "Chord"
+      },
+      "type": "Chord"
+    },
+    {
+      "name": "sup",
+      "line": 30,
+      "expr": {
+        "call": "Chord",
+        "args": [
+          {
+            "set": [
+              {
+                "lit": 2
+              }
+            ]
+          }
+        ],
+        "kwargs": {},
+        "type": "Chord"
+      },
+      "type": "Chord"
+    },
+    {
+      "name": "mdm",
+      "line": 31,
+      "expr": {
+        "call": "Chord",
+        "args": [
+          {
+            "set": [
+              {
+                "lit": 3
+              }
+            ]
+          }
+        ],
+        "kwargs": {},
+        "type": "Chord"
+      },
+      "type": "Chord"
+    },
+    {
+      "name": "mdM",
+      "line": 32,
+      "expr": {
+        "call": "Chord",
+        "args": [
+          {
+            "set": [
+              {
+                "lit": 4
+              }
+            ]
+          }
+        ],
+        "kwargs": {},
+        "type": "Chord"
+      },
+      "type": "Chord"
+    },
+    {
+      "name": "sub",
+      "line": 33,
+      "expr": {
+        "call": "Chord",
+        "args": [
+          {
+            "set": [
+              {
+                "lit": 5
+              }
+            ]
+          }
+        ],
+        "kwargs": {},
+        "type": "Chord"
+      },
+      "type": "Chord"
+    },
+    {
+      "name": "tri",
+      "line": 34,
+      "expr": {
+        "call": "Chord",
+        "args": [
+          {
+            "set": [
+              {
+                "lit": 6
+              }
+            ]
+          }
+        ],
+        "kwargs": {},
+        "type": "Chord"
+      },
+      "type": "Chord"
+    },
+    {
+      "name": "dom",
+      "line": 35,
+      "expr": {
+        "call": "Chord",
+        "args": [
+          {
+            "set": [
+              {
+                "lit": 7
+              }
+            ]
+          }
+        ],
+        "kwargs": {},
+        "type": "Chord"
+      },
+      "type": "Chord"
+    },
+    {
+      "name": "smm",
+      "line": 36,
+      "expr": {
+        "call": "Chord",
+        "args": [
+          {
+            "set": [
+              {
+                "lit": 8
+              }
+            ]
+          }
+        ],
+        "kwargs": {},
+        "type": "Chord"
+      },
+      "type": "Chord"
+    },
+    {
+      "name": "smM",
+      "line": 37,
+      "expr": {
+        "call": "Chord",
+        "args": [
+          {
+            "set": [
+              {
+                "lit": 9
+              }
+            ]
+          }
+        ],
+        "kwargs": {},
+        "type": "Chord"
+      },
+      "type": "Chord"
+    },
+    {
+      "name": "sbt",
+      "line": 38,
+      "expr": {
+        "call": "Chord",
+        "args": [
+          {
+            "set": [
+              {
+                "lit": 10
+              }
+            ]
+          }
+        ],
+        "kwargs": {},
+        "type": "Chord"
+      },
+      "type": "Chord"
+    },
+    {
+      "name": "ldt",
+      "line": 39,
+      "expr": {
+        "call": "Chord",
+        "args": [
+          {
+            "set": [
+              {
+                "lit": 11
+              }
+            ]
+          }
+        ],
+        "kwargs": {},
+        "type": "Chord"
+      },
+      "type": "Chord"
+    },
+    {
+      "name": "h_Ton",
+      "line": 44,
+      "expr": {
+        "call": "Harmony.from_chord",
+        "args": [
+          {
+            "ref": "ton"
+          }
+        ],
+        "kwargs": {},
+        "type": "Harmony"
+      },
+      "type": "Harmony"
+    },
+    {
+      "name": "h_Sup",
+      "line": 45,
+      "expr": {
+        "call": "Harmony.from_chord",
+        "args": [
+          {
+            "ref": "sup"
+          }
+        ],
+        "kwargs": {},
+        "type": "Harmony"
+      },
+      "type": "Harmony"
+    },
+    {
+      "name": "h_Min",
+      "line": 46,
+      "expr": {
+        "call": "Harmony.from_chord",
+        "args": [
+          {
+            "ref": "mdm"
+          }
+        ],
+        "kwargs": {},
+        "type": "Harmony"
+      },
+      "type": "Harmony"
+    },
+    {
+      "name": "h_Sub",
+      "line": 47,
+      "expr": {
+        "call": "Harmony.from_chord",
+        "args": [
+          {
+            "ref": "sub"
+          }
+        ],
+        "kwargs": {},
+        "type": "Harmony"
+      },
+      "type": "Harmony"
+    },
+    {
+      "name": "h_Tri",
+      "line": 48,
+      "expr": {
+        "call": "Harmony.from_chord",
+        "args": [
+          {
+            "ref": "tri"
+          }
+        ],
+        "kwargs": {},
+        "type": "Harmony"
+      },
+      "type": "Harmony"
+    },
+    {
+      "name": "h_Dom",
+      "line": 49,
+      "expr": {
+        "call": "Harmony.from_chord",
+        "args": [
+          {
+            "ref": "dom"
+          }
+        ],
+        "kwargs": {},
+        "type": "Harmony"
+      },
+      "type": "Harmony"
+    },
+    {
+      "name": "h_Smm",
+      "line": 50,
+      "expr": {
+        "call": "Harmony.from_chord",
+        "args": [
+          {
+            "ref": "smm"
+          }
+        ],
+        "kwargs": {},
+        "type": "Harmony"
+      },
+      "type": "Harmony"
+    },
+    {
+      "name": "h_SmM",
+      "line": 51,
+      "expr": {
+        "call": "Harmony.from_chord",
+        "args": [
+          {
+            "ref": "smM"
+          }
+        ],
+        "kwargs": {},
+        "type": "Harmony"
+      },
+      "type": "Harmony"
+    },
+    {
+      "name": "h_Min_6M",
+      "line": 54,
+      "expr": {
+        "call": "Harmony",
+        "args": [
+          {
+            "op": "|",
+            "args": [
+              {
+                "ref": "mdm"
+              },
+              {
+                "op": "+",
+                "args": [
+                  {
+                    "ref": "ton"
+                  },
+                  {
+                    "lit": 12
+                  }
+                ],
+                "sig": [
+                  "Chord",
+                  "int"
+                ],
+                "type": "Chord"
+              }
+            ],
+            "sig": [
+              "Chord",
+              "Chord"
+            ],
+            "type": "Chord"
+          }
+        ],
+        "kwargs": {},
+        "type": "Harmony"
+      },
+      "type": "Harmony"
+    },
+    {
+      "name": "h_Maj_6m",
+      "line": 55,
+      "expr": {
+        "call": "Harmony",
+        "args": [
+          {
+            "op": "|",
+            "args": [
+              {
+                "ref": "mdM"
+              },
+              {
+                "op": "+",
+                "args": [
+                  {
+                    "ref": "ton"
+                  },
+                  {
+                    "lit": 12
+                  }
+                ],
+                "sig": [
+                  "Chord",
+                  "int"
+                ],
+                "type": "Chord"
+              }
+            ],
+            "sig": [
+              "Chord",
+              "Chord"
+            ],
+            "type": "Chord"
+          }
+        ],
+        "kwargs": {},
+        "type": "Harmony"
+      },
+      "type": "Harmony"
+    },
+    {
+      "name": "h_Sub_4A",
+      "line": 56,
+      "expr": {
+        "call": "Harmony",
+        "args": [
+          {
+            "op": "|",
+            "args": [
+              {
+                "ref": "sbt"
+              },
+              {
+                "op": "+",
+                "args": [
+                  {
+                    "ref": "mdM"
+                  },
+                  {
+                    "lit": 12
+                  }
+                ],
+                "sig": [
+                  "Chord",
+                  "int"
+                ],
+                "type": "Chord"
+              }
+            ],
+            "sig": [
+              "Chord",
+              "Chord"
+            ],
+            "type": "Chord"
+          }
+        ],
+        "kwargs": {},
+        "type": "Harmony"
+      },
+      "type": "Harmony"
+    },
+    {
+      "name": "h_Smm_6M",
+      "line": 57,
+      "expr": {
+        "call": "Harmony",
+        "args": [
+          {
+            "op": "|",
+            "args": [
+              {
+                "ref": "smm"
+              },
+              {
+                "op": "+",
+                "args": [
+                  {
+                    "ref": "sub"
+                  },
+                  {
+                    "lit": 12
+                  }
+                ],
+                "sig": [
+                  "Chord",
+                  "int"
+                ],
+                "type": "Chord"
+              }
+            ],
+            "sig": [
+              "Chord",
+              "Chord"
+            ],
+            "type": "Chord"
+          }
+        ],
+        "kwargs": {},
+        "type": "Harmony"
+      },
+      "type": "Harmony"
+    },
+    {
+      "name": "h_Maj_3m",
+      "line": 58,
+      "expr": {
+        "call": "Harmony",
+        "args": [
+          {
+            "op": "|",
+            "args": [
+              {
+                "ref": "mdM"
+              },
+              {
+                "ref": "dom"
+              }
+            ],
+            "sig": [
+              "Chord",
+              "Chord"
+            ],
+            "type": "Chord"
+          }
+        ],
+        "kwargs": {},
+        "type": "Harmony"
+      },
+      "type": "Harmony"
+    },
+    {
+      "name": "h_Sub_3m",
+      "line": 59,
+      "expr": {
+        "call": "Harmony",
+        "args": [
+          {
+            "op": "|",
+            "args": [
+              {
+                "ref": "sub"
+              },
+              {
+                "ref": "smm"
+              }
+            ],
+            "sig": [
+              "Chord",
+              "Chord"
+            ],
+            "type": "Chord"
+          }
+        ],
+        "kwargs": {},
+        "type": "Harmony"
+      },
+      "type": "Harmony"
+    },
+    {
+      "name": "h_Sup_6M",
+      "line": 60,
+      "expr": {
+        "call": "Harmony",
+        "args": [
+          {
+            "op": "|",
+            "args": [
+              {
+                "ref": "sup"
+              },
+              {
+                "ref": "ldt"
+              }
+            ],
+            "sig": [
+              "Chord",
+              "Chord"
+            ],
+            "type": "Chord"
+          }
+        ],
+        "kwargs": {},
+        "type": "Harmony"
+      },
+      "type": "Harmony"
+    },
+    {
+      "name": "h_viio36",
+      "line": 63,
+      "expr": {
+        "call": "Harmony",
+        "args": [
+          {
+            "op": "|",
+            "args": [
+              {
+                "op": "|",
+                "args": [
+                  {
+                    "ref": "sup"
+                  },
+                  {
+                    "ref": "sub"
+                  }
+                ],
+                "sig": [
+                  "Chord",
+                  "Chord"
+                ],
+                "type": "Chord"
+              },
+              {
+                "ref": "ldt"
+              }
+            ],
+            "sig": [
+              "Chord",
+              "Chord"
+            ],
+            "type": "Chord"
+          }
+        ],
+        "kwargs": {},
+        "type": "Harmony"
+      },
+      "type": "Harmony"
+    },
+    {
+      "name": "h_i46",
+      "line": 64,
+      "expr": {
+        "call": "Harmony",
+        "args": [
+          {
+            "op": "|",
+            "args": [
+              {
+                "op": "|",
+                "args": [
+                  {
+                    "ref": "dom"
+                  },
+                  {
+                    "op": "+",
+                    "args": [
+                      {
+                        "ref": "ton"
+                      },
+                      {
+                        "lit": 12
+                      }
+                    ],
+                    "sig": [
+                      "Chord",
+                      "int"
+                    ],
+                    "type": "Chord"
+                  }
+                ],
+                "sig": [
+                  "Chord",
+                  "Chord"
+                ],
+                "type": "Chord"
+              },
+              {
+                "op": "+",
+                "args": [
+                  {
+                    "ref": "mdm"
+                  },
+                  {
+                    "lit": 12
+                  }
+                ],
+                "sig": [
+                  "Chord",
+                  "int"
+                ],
+                "type": "Chord"
+              }
+            ],
+            "sig": [
+              "Chord",
+              "Chord"
+            ],
+            "type": "Chord"
+          }
+        ],
+        "kwargs": {},
+        "type": "Harmony"
+      },
+      "type": "Harmony"
+    },
+    {
+      "name": "h_iio36",
+      "line": 65,
+      "expr": {
+        "call": "Harmony",
+        "args": [
+          {
+            "op": "|",
+            "args": [
+              {
+                "op": "|",
+                "args": [
+                  {
+                    "ref": "sub"
+                  },
+                  {
+                    "ref": "smm"
+                  }
+                ],
+                "sig": [
+                  "Chord",
+                  "Chord"
+                ],
+                "type": "Chord"
+              },
+              {
+                "op": "+",
+                "args": [
+                  {
+                    "ref": "sup"
+                  },
+                  {
+                    "lit": 12
+                  }
+                ],
+                "sig": [
+                  "Chord",
+                  "int"
+                ],
+                "type": "Chord"
+              }
+            ],
+            "sig": [
+              "Chord",
+              "Chord"
+            ],
+            "type": "Chord"
+          }
+        ],
+        "kwargs": {},
+        "type": "Harmony"
+      },
+      "type": "Harmony"
+    },
+    {
+      "name": "h_i358",
+      "line": 68,
+      "expr": {
+        "call": "Harmony",
+        "args": [
+          {
+            "op": "|",
+            "args": [
+              {
+                "op": "|",
+                "args": [
+                  {
+                    "op": "|",
+                    "args": [
+                      {
+                        "ref": "ton"
+                      },
+                      {
+                        "ref": "mdm"
+                      }
+                    ],
+                    "sig": [
+                      "Chord",
+                      "Chord"
+                    ],
+                    "type": "Chord"
+                  },
+                  {
+                    "ref": "dom"
+                  }
+                ],
+                "sig": [
+                  "Chord",
+                  "Chord"
+                ],
+                "type": "Chord"
+              },
+              {
+                "op": "+",
+                "args": [
+                  {
+                    "ref": "ton"
+                  },
+                  {
+                    "lit": 12
+                  }
+                ],
+                "sig": [
+                  "Chord",
+                  "int"
+                ],
+                "type": "Chord"
+              }
+            ],
+            "sig": [
+              "Chord",
+              "Chord"
+            ],
+            "type": "Chord"
+          }
+        ],
+        "kwargs": {},
+        "type": "Harmony"
+      },
+      "type": "Harmony"
+    },
+    {
+      "name": "h_V378",
+      "line": 69,
+      "expr": {
+        "call": "Harmony",
+        "args": [
+          {
+            "op": "|",
+            "args": [
+              {
+                "op": "|",
+                "args": [
+                  {
+                    "op": "|",
+                    "args": [
+                      {
+                        "ref": "dom"
+                      },
+                      {
+                        "ref": "ldt"
+                      }
+                    ],
+                    "sig": [
+                      "Chord",
+                      "Chord"
+                    ],
+                    "type": "Chord"
+                  },
+                  {
+                    "op": "+",
+                    "args": [
+                      {
+                        "ref": "sub"
+                      },
+                      {
+                        "lit": 12
+                      }
+                    ],
+                    "sig": [
+                      "Chord",
+                      "int"
+                    ],
+                    "type": "Chord"
+                  }
+                ],
+                "sig": [
+                  "Chord",
+                  "Chord"
+                ],
+                "type": "Chord"
+              },
+              {
+                "op": "+",
+                "args": [
+                  {
+                    "ref": "dom"
+                  },
+                  {
+                    "lit": 12
+                  }
+                ],
+                "sig": [
+                  "Chord",
+                  "int"
+                ],
+                "type": "Chord"
+              }
+            ],
+            "sig": [
+              "Chord",
+              "Chord"
+            ],
+            "type": "Chord"
+          }
+        ],
+        "kwargs": {},
+        "type": "Harmony"
+      },
+      "type": "Harmony"
+    },
+    {
+      "name": "h_Ton_2",
+      "line": 72,
+      "expr": {
+        "call": "Harmony.from_chord",
+        "args": [
+          {
+            "op": "|",
+            "args": [
+              {
+                "ref": "ton"
+              },
+              {
+                "op": "+",
+                "args": [
+                  {
+                    "ref": "ton"
+                  },
+                  {
+                    "lit": 12
+                  }
+                ],
+                "sig": [
+                  "Chord",
+                  "int"
+                ],
+                "type": "Chord"
+              }
+            ],
+            "sig": [
+              "Chord",
+              "Chord"
+            ],
+            "type": "Chord"
+          }
+        ],
+        "kwargs": {},
+        "type": "Harmony"
+      },
+      "type": "Harmony"
+    },
+    {
+      "name": "h_Sup_2",
+      "line": 73,
+      "expr": {
+        "call": "Harmony.from_chord",
+        "args": [
+          {
+            "op": "|",
+            "args": [
+              {
+                "ref": "sup"
+              },
+              {
+                "op": "+",
+                "args": [
+                  {
+                    "ref": "sup"
+                  },
+                  {
+                    "lit": 12
+                  }
+                ],
+                "sig": [
+                  "Chord",
+                  "int"
+                ],
+                "type": "Chord"
+              }
+            ],
+            "sig": [
+              "Chord",
+              "Chord"
+            ],
+            "type": "Chord"
+          }
+        ],
+        "kwargs": {},
+        "type": "Harmony"
+      },
+      "type": "Harmony"
+    },
+    {
+      "name": "h_Min_2",
+      "line": 74,
+      "expr": {
+        "call": "Harmony.from_chord",
+        "args": [
+          {
+            "op": "|",
+            "args": [
+              {
+                "ref": "mdm"
+              },
+              {
+                "op": "+",
+                "args": [
+                  {
+                    "ref": "mdm"
+                  },
+                  {
+                    "lit": 12
+                  }
+                ],
+                "sig": [
+                  "Chord",
+                  "int"
+                ],
+                "type": "Chord"
+              }
+            ],
+            "sig": [
+              "Chord",
+              "Chord"
+            ],
+            "type": "Chord"
+          }
+        ],
+        "kwargs": {},
+        "type": "Harmony"
+      },
+      "type": "Harmony"
+    },
+    {
+      "name": "h_Sub_2",
+      "line": 75,
+      "expr": {
+        "call": "Harmony.from_chord",
+        "args": [
+          {
+            "op": "|",
+            "args": [
+              {
+                "ref": "sub"
+              },
+              {
+                "op": "+",
+                "args": [
+                  {
+                    "ref": "sub"
+                  },
+                  {
+                    "lit": 12
+                  }
+                ],
+                "sig": [
+                  "Chord",
+                  "int"
+                ],
+                "type": "Chord"
+              }
+            ],
+            "sig": [
+              "Chord",
+              "Chord"
+            ],
+            "type": "Chord"
+          }
+        ],
+        "kwargs": {},
+        "type": "Harmony"
+      },
+      "type": "Harmony"
+    },
+    {
+      "name": "h_Tri_2",
+      "line": 76,
+      "expr": {
+        "call": "Harmony.from_chord",
+        "args": [
+          {
+            "op": "|",
+            "args": [
+              {
+                "ref": "tri"
+              },
+              {
+                "op": "+",
+                "args": [
+                  {
+                    "ref": "tri"
+                  },
+                  {
+                    "lit": 12
+                  }
+                ],
+                "sig": [
+                  "Chord",
+                  "int"
+                ],
+                "type": "Chord"
+              }
+            ],
+            "sig": [
+              "Chord",
+              "Chord"
+            ],
+            "type": "Chord"
+          }
+        ],
+        "kwargs": {},
+        "type": "Harmony"
+      },
+      "type": "Harmony"
+    },
+    {
+      "name": "h_Dom_2",
+      "line": 77,
+      "expr": {
+        "call": "Harmony.from_chord",
+        "args": [
+          {
+            "op": "|",
+            "args": [
+              {
+                "ref": "dom"
+              },
+              {
+                "op": "+",
+                "args": [
+                  {
+                    "ref": "dom"
+                  },
+                  {
+                    "lit": 12
+                  }
+                ],
+                "sig": [
+                  "Chord",
+                  "int"
+                ],
+                "type": "Chord"
+              }
+            ],
+            "sig": [
+              "Chord",
+              "Chord"
+            ],
+            "type": "Chord"
+          }
+        ],
+        "kwargs": {},
+        "type": "Harmony"
+      },
+      "type": "Harmony"
+    },
+    {
+      "name": "h_Smm_2",
+      "line": 78,
+      "expr": {
+        "call": "Harmony.from_chord",
+        "args": [
+          {
+            "op": "|",
+            "args": [
+              {
+                "ref": "smm"
+              },
+              {
+                "op": "+",
+                "args": [
+                  {
+                    "ref": "smm"
+                  },
+                  {
+                    "lit": 12
+                  }
+                ],
+                "sig": [
+                  "Chord",
+                  "int"
+                ],
+                "type": "Chord"
+              }
+            ],
+            "sig": [
+              "Chord",
+              "Chord"
+            ],
+            "type": "Chord"
+          }
+        ],
+        "kwargs": {},
+        "type": "Harmony"
+      },
+      "type": "Harmony"
+    },
+    {
+      "name": "m11_bass",
+      "line": 88,
+      "expr": {
+        "op": "@",
+        "args": [
+          {
+            "op": "*",
+            "args": [
+              {
+                "ref": "t_pedal"
+              },
+              {
+                "lit": 2
+              }
+            ],
+            "sig": [
+              "Texture",
+              "int"
+            ],
+            "type": "Texture"
+          },
+          {
+            "op": "-",
+            "args": [
+              {
+                "ref": "h_Ton_2"
+              },
+              {
+                "op": "*",
+                "args": [
+                  {
+                    "lit": 12
+                  },
+                  {
+                    "lit": 2
+                  }
+                ],
+                "sig": [
+                  "int",
+                  "int"
+                ],
+                "type": "int"
+              }
+            ],
+            "sig": [
+              "Harmony",
+              "int"
+            ],
+            "type": "Harmony"
+          }
+        ],
+        "sig": [
+          "Texture",
+          "Harmony"
+        ],
+        "type": "HarmonicTexture"
+      },
+      "type": "HarmonicTexture"
+    },
+    {
+      "name": "m11_12_bass",
+      "line": 89,
+      "expr": {
+        "op": "**",
+        "args": [
+          {
+            "ref": "m11_bass"
+          },
+          {
+            "lit": 2
+          }
+        ],
+        "sig": [
+          "HarmonicTexture",
+          "int"
+        ],
+        "type": "HarmonicTexture"
+      },
+      "type": "HarmonicTexture"
+    },
+    {
+      "name": "m11_melody",
+      "line": 91,
+      "expr": {
+        "op": "@",
+        "args": [
+          {
+            "ref": "t_melody_1_head_1"
+          },
+          {
+            "op": "+",
+            "args": [
+              {
+                "ref": "h_Ton"
+              },
+              {
+                "op": "-",
+                "args": [
+                  {
+                    "ref": "h_Sub_4A"
+                  },
+                  {
+                    "lit": 12
+                  }
+                ],
+                "sig": [
+                  "Harmony",
+                  "int"
+                ],
+                "type": "Harmony"
+              }
+            ],
+            "sig": [
+              "Harmony",
+              "Harmony"
+            ],
+            "type": "Harmony"
+          }
+        ],
+        "sig": [
+          "Texture",
+          "Harmony"
+        ],
+        "type": "HarmonicTexture"
+      },
+      "type": "HarmonicTexture"
+    },
+    {
+      "name": "m12_melody",
+      "line": 92,
+      "expr": {
+        "op": "@",
+        "args": [
+          {
+            "ref": "t_melody_1_tail"
+          },
+          {
+            "op": "+",
+            "args": [
+              {
+                "op": "+",
+                "args": [
+                  {
+                    "op": "+",
+                    "args": [
+                      {
+                        "op": "-",
+                        "args": [
+                          {
+                            "ref": "h_Smm_6M"
+                          },
+                          {
+                            "lit": 12
+                          }
+                        ],
+                        "sig": [
+                          "Harmony",
+                          "int"
+                        ],
+                        "type": "Harmony"
+                      },
+                      {
+                        "ref": "h_Maj_3m"
+                      }
+                    ],
+                    "sig": [
+                      "Harmony",
+                      "Harmony"
+                    ],
+                    "type": "Harmony"
+                  },
+                  {
+                    "ref": "h_Sub_3m"
+                  }
+                ],
+                "sig": [
+                  "Harmony",
+                  "Harmony"
+                ],
+                "type": "Harmony"
+              },
+              {
+                "ref": "h_Sup_6M"
+              }
+            ],
+            "sig": [
+              "Harmony",
+              "Harmony"
+            ],
+            "type": "Harmony"
+          }
+        ],
+        "sig": [
+          "Texture",
+          "Harmony"
+        ],
+        "type": "HarmonicTexture"
+      },
+      "type": "HarmonicTexture"
+    },
+    {
+      "name": "m11_12_melody",
+      "line": 93,
+      "expr": {
+        "op": "*",
+        "args": [
+          {
+            "ref": "m11_melody"
+          },
+          {
+            "ref": "m12_melody"
+          }
+        ],
+        "sig": [
+          "HarmonicTexture",
+          "HarmonicTexture"
+        ],
+        "type": "HarmonicTexture"
+      },
+      "type": "HarmonicTexture"
+    },
+    {
+      "name": "m11_12",
+      "line": 95,
+      "expr": {
+        "op": "+",
+        "args": [
+          {
+            "ref": "m11_12_bass"
+          },
+          {
+            "ref": "m11_12_melody"
+          }
+        ],
+        "sig": [
+          "HarmonicTexture",
+          "HarmonicTexture"
+        ],
+        "type": "HarmonicTexture"
+      },
+      "type": "HarmonicTexture"
+    },
+    {
+      "name": "m13_14_bass",
+      "line": 98,
+      "expr": {
+        "op": "**",
+        "args": [
+          {
+            "ref": "m11_bass"
+          },
+          {
+            "lit": 2
+          }
+        ],
+        "sig": [
+          "HarmonicTexture",
+          "int"
+        ],
+        "type": "HarmonicTexture"
+      },
+      "type": "HarmonicTexture"
+    },
+    {
+      "name": "m13_melody",
+      "line": 100,
+      "expr": {
+        "op": "@",
+        "args": [
+          {
+            "ref": "t_melody_1_head_2"
+          },
+          {
+            "op": "+",
+            "args": [
+              {
+                "op": "+",
+                "args": [
+                  {
+                    "ref": "h_Min_6M"
+                  },
+                  {
+                    "ref": "h_Maj_6m"
+                  }
+                ],
+                "sig": [
+                  "Harmony",
+                  "Harmony"
+                ],
+                "type": "Harmony"
+              },
+              {
+                "ref": "h_Sub_4A"
+              }
+            ],
+            "sig": [
+              "Harmony",
+              "Harmony"
+            ],
+            "type": "Harmony"
+          }
+        ],
+        "sig": [
+          "Texture",
+          "Harmony"
+        ],
+        "type": "HarmonicTexture"
+      },
+      "type": "HarmonicTexture"
+    },
+    {
+      "name": "m14_melody",
+      "line": 101,
+      "expr": {
+        "op": "+",
+        "args": [
+          {
+            "ref": "m12_melody"
+          },
+          {
+            "lit": 12
+          }
+        ],
+        "sig": [
+          "HarmonicTexture",
+          "int"
+        ],
+        "type": "HarmonicTexture"
+      },
+      "type": "HarmonicTexture"
+    },
+    {
+      "name": "m13_14_melody",
+      "line": 102,
+      "expr": {
+        "op": "*",
+        "args": [
+          {
+            "ref": "m13_melody"
+          },
+          {
+            "ref": "m14_melody"
+          }
+        ],
+        "sig": [
+          "HarmonicTexture",
+          "HarmonicTexture"
+        ],
+        "type": "HarmonicTexture"
+      },
+      "type": "HarmonicTexture"
+    },
+    {
+      "name": "m13_14",
+      "line": 104,
+      "expr": {
+        "op": "+",
+        "args": [
+          {
+            "ref": "m13_14_bass"
+          },
+          {
+            "ref": "m13_14_melody"
+          }
+        ],
+        "sig": [
+          "HarmonicTexture",
+          "HarmonicTexture"
+        ],
+        "type": "HarmonicTexture"
+      },
+      "type": "HarmonicTexture"
+    },
+    {
+      "name": "phrase_1",
+      "line": 106,
+      "expr": {
+        "op": "*",
+        "args": [
+          {
+            "ref": "m11_12"
+          },
+          {
+            "ref": "m13_14"
+          }
+        ],
+        "sig": [
+          "HarmonicTexture",
+          "HarmonicTexture"
+        ],
+        "type": "HarmonicTexture"
+      },
+      "type": "HarmonicTexture"
+    },
+    {
+      "name": "m15_1_bass",
+      "line": 110,
+      "expr": {
+        "op": "@",
+        "args": [
+          {
+            "ref": "t_pedal"
+          },
+          {
+            "op": "-",
+            "args": [
+              {
+                "ref": "h_Ton_2"
+              },
+              {
+                "op": "*",
+                "args": [
+                  {
+                    "lit": 12
+                  },
+                  {
+                    "lit": 2
+                  }
+                ],
+                "sig": [
+                  "int",
+                  "int"
+                ],
+                "type": "int"
+              }
+            ],
+            "sig": [
+              "Harmony",
+              "int"
+            ],
+            "type": "Harmony"
+          }
+        ],
+        "sig": [
+          "Texture",
+          "Harmony"
+        ],
+        "type": "HarmonicTexture"
+      },
+      "type": "HarmonicTexture"
+    },
+    {
+      "name": "m15_2_bass",
+      "line": 111,
+      "expr": {
+        "op": "@",
+        "args": [
+          {
+            "ref": "t_pedal"
+          },
+          {
+            "op": "-",
+            "args": [
+              {
+                "ref": "h_Sup_2"
+              },
+              {
+                "op": "*",
+                "args": [
+                  {
+                    "lit": 12
+                  },
+                  {
+                    "lit": 2
+                  }
+                ],
+                "sig": [
+                  "int",
+                  "int"
+                ],
+                "type": "int"
+              }
+            ],
+            "sig": [
+              "Harmony",
+              "int"
+            ],
+            "type": "Harmony"
+          }
+        ],
+        "sig": [
+          "Texture",
+          "Harmony"
+        ],
+        "type": "HarmonicTexture"
+      },
+      "type": "HarmonicTexture"
+    },
+    {
+      "name": "m16_1_bass",
+      "line": 112,
+      "expr": {
+        "op": "@",
+        "args": [
+          {
+            "ref": "t_pedal"
+          },
+          {
+            "op": "-",
+            "args": [
+              {
+                "ref": "h_Min_2"
+              },
+              {
+                "op": "*",
+                "args": [
+                  {
+                    "lit": 12
+                  },
+                  {
+                    "lit": 2
+                  }
+                ],
+                "sig": [
+                  "int",
+                  "int"
+                ],
+                "type": "int"
+              }
+            ],
+            "sig": [
+              "Harmony",
+              "int"
+            ],
+            "type": "Harmony"
+          }
+        ],
+        "sig": [
+          "Texture",
+          "Harmony"
+        ],
+        "type": "HarmonicTexture"
+      },
+      "type": "HarmonicTexture"
+    },
+    {
+      "name": "m16_2_bass",
+      "line": 113,
+      "expr": {
+        "op": "@",
+        "args": [
+          {
+            "ref": "t_pedal"
+          },
+          {
+            "op": "-",
+            "args": [
+              {
+                "ref": "h_Sub_2"
+              },
+              {
+                "op": "*",
+                "args": [
+                  {
+                    "lit": 12
+                  },
+                  {
+                    "lit": 2
+                  }
+                ],
+                "sig": [
+                  "int",
+                  "int"
+                ],
+                "type": "int"
+              }
+            ],
+            "sig": [
+              "Harmony",
+              "int"
+            ],
+            "type": "Harmony"
+          }
+        ],
+        "sig": [
+          "Texture",
+          "Harmony"
+        ],
+        "type": "HarmonicTexture"
+      },
+      "type": "HarmonicTexture"
+    },
+    {
+      "name": "m17_1_bass",
+      "line": 114,
+      "expr": {
+        "op": "@",
+        "args": [
+          {
+            "ref": "t_pedal"
+          },
+          {
+            "op": "-",
+            "args": [
+              {
+                "ref": "h_Dom_2"
+              },
+              {
+                "op": "*",
+                "args": [
+                  {
+                    "lit": 12
+                  },
+                  {
+                    "lit": 2
+                  }
+                ],
+                "sig": [
+                  "int",
+                  "int"
+                ],
+                "type": "int"
+              }
+            ],
+            "sig": [
+              "Harmony",
+              "int"
+            ],
+            "type": "Harmony"
+          }
+        ],
+        "sig": [
+          "Texture",
+          "Harmony"
+        ],
+        "type": "HarmonicTexture"
+      },
+      "type": "HarmonicTexture"
+    },
+    {
+      "name": "m17_2_bass",
+      "line": 115,
+      "expr": {
+        "op": "@",
+        "args": [
+          {
+            "ref": "t_pedal"
+          },
+          {
+            "op": "-",
+            "args": [
+              {
+                "ref": "h_Smm_2"
+              },
+              {
+                "op": "*",
+                "args": [
+                  {
+                    "lit": 12
+                  },
+                  {
+                    "lit": 2
+                  }
+                ],
+                "sig": [
+                  "int",
+                  "int"
+                ],
+                "type": "int"
+              }
+            ],
+            "sig": [
+              "Harmony",
+              "int"
+            ],
+            "type": "Harmony"
+          }
+        ],
+        "sig": [
+          "Texture",
+          "Harmony"
+        ],
+        "type": "HarmonicTexture"
+      },
+      "type": "HarmonicTexture"
+    },
+    {
+      "name": "m18_1_bass",
+      "line": 116,
+      "expr": {
+        "op": "@",
+        "args": [
+          {
+            "ref": "t_pedal"
+          },
+          {
+            "op": "-",
+            "args": [
+              {
+                "ref": "h_Tri_2"
+              },
+              {
+                "op": "*",
+                "args": [
+                  {
+                    "lit": 12
+                  },
+                  {
+                    "lit": 2
+                  }
+                ],
+                "sig": [
+                  "int",
+                  "int"
+                ],
+                "type": "int"
+              }
+            ],
+            "sig": [
+              "Harmony",
+              "int"
+            ],
+            "type": "Harmony"
+          }
+        ],
+        "sig": [
+          "Texture",
+          "Harmony"
+        ],
+        "type": "HarmonicTexture"
+      },
+      "type": "HarmonicTexture"
+    },
+    {
+      "name": "m18_2_bass",
+      "line": 117,
+      "expr": {
+        "op": "@",
+        "args": [
+          {
+            "ref": "t_pedal"
+          },
+          {
+            "op": "-",
+            "args": [
+              {
+                "ref": "h_Dom_2"
+              },
+              {
+                "op": "*",
+                "args": [
+                  {
+                    "lit": 12
+                  },
+                  {
+                    "lit": 2
+                  }
+                ],
+                "sig": [
+                  "int",
+                  "int"
+                ],
+                "type": "int"
+              }
+            ],
+            "sig": [
+              "Harmony",
+              "int"
+            ],
+            "type": "Harmony"
+          }
+        ],
+        "sig": [
+          "Texture",
+          "Harmony"
+        ],
+        "type": "HarmonicTexture"
+      },
+      "type": "HarmonicTexture"
+    },
+    {
+      "name": "m15_1_melody",
+      "line": 120,
+      "expr": {
+        "op": "@",
+        "args": [
+          {
+            "ref": "t_half"
+          },
+          {
+            "op": "+",
+            "args": [
+              {
+                "ref": "h_i358"
+              },
+              {
+                "lit": 12
+              }
+            ],
+            "sig": [
+              "Harmony",
+              "int"
+            ],
+            "type": "Harmony"
+          }
+        ],
+        "sig": [
+          "Texture",
+          "Harmony"
+        ],
+        "type": "HarmonicTexture"
+      },
+      "type": "HarmonicTexture"
+    },
+    {
+      "name": "m15_2_melody",
+      "line": 121,
+      "expr": {
+        "op": "@",
+        "args": [
+          {
+            "ref": "t_half"
+          },
+          {
+            "ref": "h_V378"
+          }
+        ],
+        "sig": [
+          "Texture",
+          "Harmony"
+        ],
+        "type": "HarmonicTexture"
+      },
+      "type": "HarmonicTexture"
+    },
+    {
+      "name": "m16_1_melody",
+      "line": 122,
+      "expr": {
+        "op": "@",
+        "args": [
+          {
+            "ref": "t_half"
+          },
+          {
+            "ref": "h_i46"
+          }
+        ],
+        "sig": [
+          "Texture",
+          "Harmony"
+        ],
+        "type": "HarmonicTexture"
+      },
+      "type": "HarmonicTexture"
+    },
+    {
+      "name": "m16_2_melody",
+      "line": 123,
+      "expr": {
+        "op": "@",
+        "args": [
+          {
+            "ref": "t_half"
+          },
+          {
+            "ref": "h_iio36"
+          }
+        ],
+        "sig": [
+          "Texture",
+          "Harmony"
+        ],
+        "type": "HarmonicTexture"
+      },
+      "type": "HarmonicTexture"
+    },
+    {
+      "name": "m17_18_1_melody_1",
+      "line": 125,
+      "expr": {
+        "op": "@",
+        "args": [
+          {
+            "ref": "t_dotted_whole"
+          },
+          {
+            "ref": "h_Min_6M"
+          }
+        ],
+        "sig": [
+          "Texture",
+          "Harmony"
+        ],
+        "type": "HarmonicTexture"
+      },
+      "type": "HarmonicTexture"
+    },
+    {
+      "name": "m17_18_1_melody_2",
+      "line": 126,
+      "expr": {
+        "op": "@",
+        "args": [
+          {
+            "op": "**",
+            "args": [
+              {
+                "ref": "t_half"
+              },
+              {
+                "lit": 3
+              }
+            ],
+            "sig": [
+              "Texture",
+              "int"
+            ],
+            "type": "Texture"
+          },
+          {
+            "op": "+",
+            "args": [
+              {
+                "op": "+",
+                "args": [
+                  {
+                    "ref": "h_Dom"
+                  },
+                  {
+                    "ref": "h_Tri"
+                  }
+                ],
+                "sig": [
+                  "Harmony",
+                  "Harmony"
+                ],
+                "type": "Harmony"
+              },
+              {
+                "ref": "h_SmM"
+              }
+            ],
+            "sig": [
+              "Harmony",
+              "Harmony"
+            ],
+            "type": "Harmony"
+          }
+        ],
+        "sig": [
+          "Texture",
+          "Harmony"
+        ],
+        "type": "HarmonicTexture"
+      },
+      "type": "HarmonicTexture"
+    },
+    {
+      "name": "m17_18_1_melody",
+      "line": 127,
+      "expr": {
+        "op": "+",
+        "args": [
+          {
+            "ref": "m17_18_1_melody_1"
+          },
+          {
+            "ref": "m17_18_1_melody_2"
+          }
+        ],
+        "sig": [
+          "HarmonicTexture",
+          "HarmonicTexture"
+        ],
+        "type": "HarmonicTexture"
+      },
+      "type": "HarmonicTexture"
+    },
+    {
+      "name": "m18_2_melody",
+      "line": 129,
+      "expr": {
+        "op": "@",
+        "args": [
+          {
+            "ref": "t_half"
+          },
+          {
+            "ref": "h_viio36"
+          }
+        ],
+        "sig": [
+          "Texture",
+          "Harmony"
+        ],
+        "type": "HarmonicTexture"
+      },
+      "type": "HarmonicTexture"
+    },
+    {
+      "name": "m15_1",
+      "line": 131,
+      "expr": {
+        "op": "+",
+        "args": [
+          {
+            "ref": "m15_1_bass"
+          },
+          {
+            "ref": "m15_1_melody"
+          }
+        ],
+        "sig": [
+          "HarmonicTexture",
+          "HarmonicTexture"
+        ],
+        "type": "HarmonicTexture"
+      },
+      "type": "HarmonicTexture"
+    },
+    {
+      "name": "m15_2",
+      "line": 132,
+      "expr": {
+        "op": "+",
+        "args": [
+          {
+            "ref": "m15_2_bass"
+          },
+          {
+            "ref": "m15_2_melody"
+          }
+        ],
+        "sig": [
+          "HarmonicTexture",
+          "HarmonicTexture"
+        ],
+        "type": "HarmonicTexture"
+      },
+      "type": "HarmonicTexture"
+    },
+    {
+      "name": "m16_1",
+      "line": 133,
+      "expr": {
+        "op": "+",
+        "args": [
+          {
+            "ref": "m16_1_bass"
+          },
+          {
+            "ref": "m16_1_melody"
+          }
+        ],
+        "sig": [
+          "HarmonicTexture",
+          "HarmonicTexture"
+        ],
+        "type": "HarmonicTexture"
+      },
+      "type": "HarmonicTexture"
+    },
+    {
+      "name": "m16_2",
+      "line": 134,
+      "expr": {
+        "op": "+",
+        "args": [
+          {
+            "ref": "m16_2_bass"
+          },
+          {
+            "ref": "m16_2_melody"
+          }
+        ],
+        "sig": [
+          "HarmonicTexture",
+          "HarmonicTexture"
+        ],
+        "type": "HarmonicTexture"
+      },
+      "type": "HarmonicTexture"
+    },
+    {
+      "name": "m17_18_1",
+      "line": 135,
+      "expr": {
+        "op": "+",
+        "args": [
+          {
+            "op": "*",
+            "args": [
+              {
+                "op": "*",
+                "args": [
+                  {
+                    "ref": "m17_1_bass"
+                  },
+                  {
+                    "ref": "m17_2_bass"
+                  }
+                ],
+                "sig": [
+                  "HarmonicTexture",
+                  "HarmonicTexture"
+                ],
+                "type": "HarmonicTexture"
+              },
+              {
+                "ref": "m18_1_bass"
+              }
+            ],
+            "sig": [
+              "HarmonicTexture",
+              "HarmonicTexture"
+            ],
+            "type": "HarmonicTexture"
+          },
+          {
+            "ref": "m17_18_1_melody"
+          }
+        ],
+        "sig": [
+          "HarmonicTexture",
+          "HarmonicTexture"
+        ],
+        "type": "HarmonicTexture"
+      },
+      "type": "HarmonicTexture"
+    },
+    {
+      "name": "m18_2",
+      "line": 136,
+      "expr": {
+        "op": "+",
+        "args": [
+          {
+            "ref": "m18_2_bass"
+          },
+          {
+            "ref": "m18_2_melody"
+          }
+        ],
+        "sig": [
+          "HarmonicTexture",
+          "HarmonicTexture"
+        ],
+        "type": "HarmonicTexture"
+      },
+      "type": "HarmonicTexture"
+    },
+    {
+      "name": "phrase_2",
+      "line": 138,
+      "expr": {
+        "op": "*",
+        "args": [
+          {
+            "op": "*",
+            "args": [
+              {
+                "op": "*",
+                "args": [
+                  {
+                    "op": "*",
+                    "args": [
+                      {
+                        "op": "*",
+                        "args": [
+                          {
+                            "ref": "m15_1"
+                          },
+                          {
+                            "ref": "m15_2"
+                          }
+                        ],
+                        "sig": [
+                          "HarmonicTexture",
+                          "HarmonicTexture"
+                        ],
+                        "type": "HarmonicTexture"
+                      },
+                      {
+                        "ref": "m16_1"
+                      }
+                    ],
+                    "sig": [
+                      "HarmonicTexture",
+                      "HarmonicTexture"
+                    ],
+                    "type": "HarmonicTexture"
+                  },
+                  {
+                    "ref": "m16_2"
+                  }
+                ],
+                "sig": [
+                  "HarmonicTexture",
+                  "HarmonicTexture"
+                ],
+                "type": "HarmonicTexture"
+              },
+              {
+                "ref": "m17_18_1"
+              }
+            ],
+            "sig": [
+              "HarmonicTexture",
+              "HarmonicTexture"
+            ],
+            "type": "HarmonicTexture"
+          },
+          {
+            "ref": "m18_2"
+          }
+        ],
+        "sig": [
+          "HarmonicTexture",
+          "HarmonicTexture"
+        ],
+        "type": "HarmonicTexture"
+      },
+      "type": "HarmonicTexture"
+    },
+    {
+      "name": "theme_p",
+      "line": 140,
+      "expr": {
+        "op": "*",
+        "args": [
+          {
+            "ref": "phrase_1"
+          },
+          {
+            "ref": "phrase_2"
+          }
+        ],
+        "sig": [
+          "HarmonicTexture",
+          "HarmonicTexture"
+        ],
+        "type": "HarmonicTexture"
+      },
+      "type": "HarmonicTexture"
+    },
+    {
+      "name": "exposition",
+      "line": 142,
+      "expr": {
+        "ref": "theme_p"
+      },
+      "type": "HarmonicTexture"
+    },
+    {
+      "name": "piece",
+      "line": 144,
+      "expr": {
+        "op": "+",
+        "args": [
+          {
+            "ref": "tonic"
+          },
+          {
+            "ref": "exposition"
+          }
+        ],
+        "sig": [
+          "Pitch",
+          "HarmonicTexture"
+        ],
+        "type": "HarmonicTexture"
+      },
+      "type": "HarmonicTexture"
+    }
+  ],
+  "root": "piece"
+}

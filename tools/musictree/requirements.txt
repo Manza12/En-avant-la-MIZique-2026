@@ -1,0 +1,5 @@
+# Required
+pytest
+
+# Optional - for rendering .svg/.png from .dot files
+# graphviz (Python bindings not needed; only the `dot` CLI binary)
